@@ -73,14 +73,14 @@ void ABaseFirstPersonCharacter::MoveRight(float value)
 }
 
 void ABaseFirstPersonCharacter::LookUp(float value)
-{
-	AddControllerPitchInput(value * MouseSpeed * -1);
-}
-
-void ABaseFirstPersonCharacter::LookRight(float value)
-{
-	AddControllerYawInput(value * MouseSpeed);
-}
+  {
+  	AddControllerPitchInput(value * MouseSpeed * -1);
+  }
+  
+  void ABaseFirstPersonCharacter::LookRight(float value)
+  {
+  	AddControllerYawInput(value * MouseSpeed);
+  }
 
 void ABaseFirstPersonCharacter::Tick(float DeltaTime)
 {

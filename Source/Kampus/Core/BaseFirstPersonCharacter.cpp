@@ -3,6 +3,7 @@
 
 #include "BaseFirstPersonCharacter.h"
 
+#include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 
 // Sets default values
@@ -22,25 +23,23 @@ void ABaseFirstPersonCharacter::BeginPlay()
 
 void ABaseFirstPersonCharacter::MoveForward(float value)
 {
-	 FVector direction = FVector::ForwardVector * value;
-	AddMovementInput(direction * Speed);
+	AddMovementInput(GetActorForwardVector() * Speed * value);
 }
 
 void ABaseFirstPersonCharacter::MoveRight(float value)
 {
-	 FVector direction = FVector::RightVector * value;
-	AddMovementInput(direction * Speed);
+	AddMovementInput(GetActorRightVector() * Speed * value);
 }
 
 void ABaseFirstPersonCharacter::LookUp(float value)
-{
-	AddControllerPitchInput(value * MouseSpeed * -1);
-}
-
-void ABaseFirstPersonCharacter::LookRight(float value)
-{
-	AddControllerYawInput(value * MouseSpeed);
-}
+  {
+  	AddControllerPitchInput(value * MouseSpeed * -1);
+  }
+  
+  void ABaseFirstPersonCharacter::LookRight(float value)
+  {
+  	AddControllerYawInput(value * MouseSpeed);
+  }
 
 // Called every frame
 void ABaseFirstPersonCharacter::Tick(float DeltaTime)

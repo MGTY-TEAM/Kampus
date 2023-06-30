@@ -5,21 +5,62 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "DrawDebugHelpers.h"
+#include "TokenizedMessage.h"
+#include "Engine/Engine.h"
+#include "Entity/Interactable/InteractableActor.h"
 
-// Sets default values
 ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
+	SpringArmComponent->SetupAttachment(RootComponent);
+	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
-// Called when the game starts or when spawned
 void ABaseFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
+
+void ABaseFirstPersonCharacter::Interact()
+{
+	FVector Start = CameraComponent->GetComponentLocation();
+	FVector ForwardVector = CameraComponent->GetForwardVector();
+	FVector End = ((ForwardVector * InteractionDistance) + Start);
+
+	FHitResult OutHit;
+	FCollisionQueryParams CollisionParams;
+
+	if (GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams))
+	{
+		if (OutHit.bBlockingHit)
+		{
+			IInteractable* InteractableObject = Cast<IInteractable>(OutHit.Actor);
+			if (InteractableObject)
+			{
+				InteractableObject->Interact();
+			}
+		}
+	}
+
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 5, 0, 1);
+}
+
+
+void ABaseFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	PlayerInputComponent->BindAction("Interaction", IE_Pressed, this, &ABaseFirstPersonCharacter::Interact);
+
+	PlayerInputComponent->BindAxis("ForwardAxis", this, &ABaseFirstPersonCharacter::MoveForward);
+	PlayerInputComponent->BindAxis("RightAxis", this, &ABaseFirstPersonCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MouseX", this, &ABaseFirstPersonCharacter::LookRight);
+	PlayerInputComponent->BindAxis("MouseY", this, &ABaseFirstPersonCharacter::LookUp);
+}
+
 
 void ABaseFirstPersonCharacter::MoveForward(float value)
 {
@@ -32,29 +73,16 @@ void ABaseFirstPersonCharacter::MoveRight(float value)
 }
 
 void ABaseFirstPersonCharacter::LookUp(float value)
-  {
-  	AddControllerPitchInput(value * MouseSpeed * -1);
-  }
-  
-  void ABaseFirstPersonCharacter::LookRight(float value)
-  {
-  	AddControllerYawInput(value * MouseSpeed);
-  }
+{
+	AddControllerPitchInput(value * MouseSpeed * -1);
+}
 
-// Called every frame
+void ABaseFirstPersonCharacter::LookRight(float value)
+{
+	AddControllerYawInput(value * MouseSpeed);
+}
+
 void ABaseFirstPersonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
-
-// Called to bind functionality to input
-void ABaseFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAxis("ForwardAxis",this, &ABaseFirstPersonCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("RightAxis",this, &ABaseFirstPersonCharacter::MoveRight);
-	PlayerInputComponent->BindAxis("MouseX", this, &ABaseFirstPersonCharacter::LookRight);
-	PlayerInputComponent->BindAxis("MouseY", this, &ABaseFirstPersonCharacter::LookUp);
-}
-

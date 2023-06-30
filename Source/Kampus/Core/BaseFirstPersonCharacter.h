@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "BaseFirstPersonCharacter.generated.h"
 
 UCLASS()
@@ -13,21 +15,32 @@ class KAMPUS_API ABaseFirstPersonCharacter : public ACharacter
 
 public:
 	ABaseFirstPersonCharacter();
-	UPROPERTY(EditInstanceOnly)
+
+	UPROPERTY(Category="Movement", EditDefaultsOnly)
 	float Speed;
-	UPROPERTY(EditInstanceOnly)
+	UPROPERTY(Category="Movement", EditDefaultsOnly)
 	float MouseSpeed;
+
+	UPROPERTY(Category="Interaction", EditDefaultsOnly)
+	float InteractionDistance;
+
+	UPROPERTY(Category="Character", VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
+	USpringArmComponent* SpringArmComponent;
+	UPROPERTY(Category="Character", VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
+	UCameraComponent* CameraComponent;
+
 protected:
 	virtual void BeginPlay() override;
-	/*Keyboard Events*/
+
+	virtual void Interact();
+
 	virtual void MoveForward(float value);
 	virtual void MoveRight(float value);
-	/*Mouse Events*/
 	virtual void LookUp(float value);
 	virtual void LookRight(float value);
-public:	
-	virtual void Tick(float DeltaTime) override;
-	
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

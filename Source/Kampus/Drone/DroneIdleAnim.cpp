@@ -15,7 +15,7 @@ UDroneIdleAnim::UDroneIdleAnim(FObjectInitializer const& ObjectInitializer)
 
 EBTNodeResult::Type UDroneIdleAnim::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	UE_LOG(LogTemp, Warning, TEXT("IdleAniumationStart"));
+	
 	auto const Controller = Cast<ADroneAIController>(OwnerComp.GetAIOwner());
 	auto const NPC = Controller-> GetPawn();
 	auto const Drone = Cast<ADrone>(NPC);

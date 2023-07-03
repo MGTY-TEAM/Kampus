@@ -3,11 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Core/BaseFirstPersonCharacter.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/Interaction/Interactable.h"
+
 #include "Drone.generated.h"
 
 UCLASS()
-class KAMPUS_API ADrone : public ACharacter
+class KAMPUS_API ADrone : public ACharacter, public IInteractable
 {
 	GENERATED_BODY()
 
@@ -18,6 +21,10 @@ public:
 	UStaticMeshComponent* Robot;
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent* Face;
+
+	ABaseFirstPersonCharacter* PlayerCharacter;
+
+	virtual void Interact() override;
 
 protected:
 	// Called when the game starts or when spawned

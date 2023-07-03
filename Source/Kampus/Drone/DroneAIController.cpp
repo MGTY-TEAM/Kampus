@@ -3,12 +3,47 @@
 
 #include "DroneAIController.h"
 
-ADroneAIController::ADroneAIController()
+#include "Drone.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/World.h"
+#include "UObject/ConstructorHelpers.h"
+
+ADroneAIController::ADroneAIController(FObjectInitializer const& Object_Initializer)
 {
+	ConstructorHelpers::FObjectFinder<UBehaviorTree> obj(TEXT("BehaviorTree'/Game/Blueprints/Drone/BT_Drone.BT_Drone'"));
+	if(obj.Succeeded())
+	{
+		BTree = obj.Object;
+	}
+	BehaviorTreeComponent = Object_Initializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorTree"));
 	
 }
 
-void ADroneAIController::IdleState()
+void ADroneAIController::BeginPlay()
 {
+	Super::BeginPlay();
+	RunBehaviorTree(BTree);
+	BehaviorTreeComponent-> StartTree(*BTree);
+}
+
+void ADroneAIController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	/*auto const NPC = this->GetPawn();
+	auto const Drone = Cast<ADrone>(NPC);
+
+	if(Drone)
+	{
+		float TimeSeconds = GetWorld()->GetTimeSeconds();
+		float Movement = (sin(TimeSeconds * Frecuency) * Amplitude) + Drone->Robot->GetComponentLocation().Z;
+		Drone->Robot->SetWorldLocation(FVector(Drone->Robot->GetComponentLocation().X, Drone->Robot->GetComponentLocation().Y, Movement));
+	}*/
 	
+	
+}
+
+void ADroneAIController::OnPossess(APawn* const InPawn)
+{
+	Super::OnPossess(InPawn);
 }

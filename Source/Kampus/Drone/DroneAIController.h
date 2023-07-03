@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
 #include "DroneAIController.generated.h"
 
 /**
@@ -15,6 +17,19 @@ class KAMPUS_API ADroneAIController : public AAIController
 	GENERATED_BODY()
 
 public:
-	ADroneAIController();
-	void IdleState();
+	ADroneAIController(FObjectInitializer const& Object_Initializer = FObjectInitializer::Get());
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+	void OnPossess(APawn* const InPawn) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sin")
+	float Frecuency;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sin")
+	float Amplitude;
+
+private:
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="AI", meta=(AllowPrivateAccess = "true"))
+	UBehaviorTreeComponent* BehaviorTreeComponent;
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite, Category="AI", meta=(AllowPrivateAccess = "true"))
+	UBehaviorTree* BTree;
 };

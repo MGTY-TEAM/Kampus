@@ -15,7 +15,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class KAMPUS_API UDroneIdleAnim : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()

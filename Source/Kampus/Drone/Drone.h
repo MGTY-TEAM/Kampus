@@ -14,6 +14,10 @@ class KAMPUS_API ADrone : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ADrone();
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	UStaticMeshComponent* Robot;
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	UStaticMeshComponent* Face;
 
 protected:
 	// Called when the game starts or when spawned

@@ -3,7 +3,7 @@
 
 #include "DroneIdleAnim.h"
 
-#include "Drone.h"
+#include "Drone/Drone.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Runtime/NavigationSystem/Public/NavigationSystem.h"
 #include "Drone/DroneAIController.h"

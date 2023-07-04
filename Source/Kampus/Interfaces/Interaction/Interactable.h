@@ -21,4 +21,6 @@ class KAMPUS_API IInteractable
 public:
 	virtual void Interact() = 0;
 	bool bCanInteract;
+
+	virtual void EndInteract() = 0;
 };

@@ -23,6 +23,17 @@ public:
 
 	UPROPERTY(Category="Interaction", EditDefaultsOnly)
 	float InteractionDistance;
+	
+	UPROPERTY(Category="Interaction", EditDefaultsOnly)
+	AActor* FocusActor;
+
+	FTimerHandle OnRobotRotationTimer;
+	FTimerHandle StepFromRobotTimer;
+
+	UPROPERTY(Category="Input", EditDefaultsOnly)
+	bool bIsEnableInput = true;
+	UPROPERTY(Category="RobotInteraction", EditDefaultsOnly)
+	bool bIsRobotInteracts = false;
 
 	UPROPERTY(Category="Character", VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	USpringArmComponent* SpringArmComponent;
@@ -38,6 +49,11 @@ protected:
 	virtual void MoveRight(float value);
 	virtual void LookUp(float value);
 	virtual void LookRight(float value);
+
+	void InteractOnWithRobot();
+	void InteractOffWithRobot();
+	void RotateToRobot();
+	void StepBackFromRobot();
 
 public:
 	virtual void Tick(float DeltaTime) override;

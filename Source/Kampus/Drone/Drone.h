@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RobotStates.h"
 #include "Core/BaseFirstPersonCharacter.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/Interaction/Interactable.h"
@@ -22,18 +23,21 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent* Face;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	float RotationSpeed;
+
+	ERobotStates CurrentState;
+
 	ABaseFirstPersonCharacter* PlayerCharacter;
 
 	virtual void Interact() override;
+	virtual void EndInteract() override;
+	void ChangeState(ERobotStates State, float Duration = 0);
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+
 };

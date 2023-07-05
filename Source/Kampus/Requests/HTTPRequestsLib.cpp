@@ -37,4 +37,3 @@ void UHTTPRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString&)> CallB
 	Request->SetHeader(TEXT("Content-Type"),TEXT("application/json"));
 	Request->ProcessRequest();
 }
-

@@ -28,8 +28,6 @@ public:
 	USpringArmComponent* SpringArmComponent;
 	UPROPERTY(Category="Character", VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
-	
-	void AILogicCallBack(const FString& Answer);
 
 protected:
 	virtual void BeginPlay() override;

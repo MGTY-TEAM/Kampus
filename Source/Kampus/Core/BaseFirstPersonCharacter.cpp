@@ -23,18 +23,8 @@ ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
 void ABaseFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	UHTTPRequestsLib::AIMyLogicGetRequest([](const FString& Answer)
-	{
-		UE_LOG(LogTemp, Warning,TEXT("%s") ,*Answer);
-	}, "/start");
-	
 }
 
-void ABaseFirstPersonCharacter::AILogicCallBack(FString Answer)
-{
-	UE_LOG(LogTemp, Warning, TEXT("CallBack: %s"), *Answer);
-}
 
 void ABaseFirstPersonCharacter::Interact()
 {

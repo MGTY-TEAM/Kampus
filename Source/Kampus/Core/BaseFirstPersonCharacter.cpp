@@ -9,6 +9,7 @@
 #include "TokenizedMessage.h"
 #include "Engine/Engine.h"
 #include "Entity/Interactable/InteractableActor.h"
+#include "Requests/HTTPRequestsLib.h"
 
 ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
 {
@@ -22,6 +23,17 @@ ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
 void ABaseFirstPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	UHTTPRequestsLib::AIMyLogicGetRequest([](const FString& Answer)
+	{
+		UE_LOG(LogTemp, Warning,TEXT("%s") ,*Answer);
+	}, "/start");
+	
+}
+
+void ABaseFirstPersonCharacter::AILogicCallBack(FString Answer)
+{
+	UE_LOG(LogTemp, Warning, TEXT("CallBack: %s"), *Answer);
 }
 
 void ABaseFirstPersonCharacter::Interact()
@@ -81,6 +93,7 @@ void ABaseFirstPersonCharacter::LookRight(float value)
 {
 	AddControllerYawInput(value * MouseSpeed);
 }
+
 
 void ABaseFirstPersonCharacter::Tick(float DeltaTime)
 {

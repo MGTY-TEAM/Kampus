@@ -38,9 +38,12 @@ public:
 	USpringArmComponent* SpringArmComponent;
 	UPROPERTY(Category="Character", VisibleAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
+	
+	void AILogicCallBack(const FString& Answer);
 
 protected:
 	virtual void BeginPlay() override;
+	void AILogicCallBack(FString Answer);
 
 	virtual void Interact();
 
@@ -55,6 +58,5 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
-
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

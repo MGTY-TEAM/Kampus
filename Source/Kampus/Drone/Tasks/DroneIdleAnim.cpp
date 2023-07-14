@@ -5,12 +5,13 @@
 
 #include "Drone/Drone.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "Runtime/NavigationSystem/Public/NavigationSystem.h"
 #include "Drone/DroneAIController.h"
 
 UDroneIdleAnim::UDroneIdleAnim(FObjectInitializer const& ObjectInitializer)
 {
-	
+	NodeName
 }
 
 EBTNodeResult::Type UDroneIdleAnim::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)

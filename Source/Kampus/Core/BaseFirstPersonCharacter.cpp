@@ -32,8 +32,8 @@ void ABaseFirstPersonCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	// Set up timers for robot interaction functions
-	GetWorldTimerManager().SetTimer(OnRobotRotationTimer, this, &ABaseFirstPersonCharacter::RotateToRobot, 0.01f, true, 0.0f);
-	GetWorldTimerManager().SetTimer(StepFromRobotTimer, this, &ABaseFirstPersonCharacter::StepBackFromRobot, 0.01f, true, 0.0f);
+	GetWorldTimerManager().SetTimer(OnFocusTimer, this, &ABaseFirstPersonCharacter::FocusOnInteractableActor, 0.01f, true, 0.0f);
+	
 }
 
 // Function for interaction
@@ -154,7 +154,7 @@ void ABaseFirstPersonCharacter::InteractOffWithRobot()
 	bIsRobotInteracts = false;
 }
 
-void ABaseFirstPersonCharacter::RotateToRobot()
+void ABaseFirstPersonCharacter::FocusOnInteractableActor()
 {
 	// Rotate towards robot
 	if (bIsRobotInteracts)
@@ -177,27 +177,19 @@ void ABaseFirstPersonCharacter::RotateToRobot()
 		float PitchRotate = FMath::Lerp(CameraComponent->GetComponentRotation().Pitch, 0.0f,GetWorld()->GetDeltaSeconds());
 
 		CameraComponent->SetWorldRotation(FRotator(PitchRotate,InterpolatedRotation.Yaw,InterpolatedRotation.Roll));
-	}
-}
 
-void ABaseFirstPersonCharacter::StepBackFromRobot()
-{
-	// Step back from robot if too close
-	if (bIsRobotInteracts)
-	{
 		// Check distance to robot
 		if (FVector::Dist(this->GetCapsuleComponent()->GetComponentLocation(),FocusActor->GetActorLocation()) < 300)
 		{
 			// Calculate target location
-			FVector StartLocation = this->GetCapsuleComponent()->GetComponentLocation();
 			FVector DesiredLocation  = this->GetCapsuleComponent()->GetForwardVector() * 300;
-			FVector TargetLocation = FVector(DesiredLocation.X * -1,DesiredLocation.Y * -1, DesiredLocation.Z) + StartLocation;
+			FVector EndLocation = FVector(DesiredLocation.X * -1,DesiredLocation.Y * -1, DesiredLocation.Z) + StartLocation;
 			float StepSpeed = 1.0f;
 			
 			// Interpolate between current location and target location
-			FVector FVectorInterpolatedVector = FMath::VInterpTo(StartLocation, TargetLocation, GetWorld()->GetDeltaSeconds(),StepSpeed);
+			FVector InterpolatedVector = FMath::VInterpTo(StartLocation, EndLocation, GetWorld()->GetDeltaSeconds(),StepSpeed);
 
-			SetActorLocation(FVectorInterpolatedVector,false);
+			SetActorLocation(InterpolatedVector,false);
 		}
 	}
 }
@@ -205,6 +197,5 @@ void ABaseFirstPersonCharacter::StepBackFromRobot()
 void ABaseFirstPersonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	// Put any per-frame logic here
 }
 

@@ -27,8 +27,7 @@ public:
 	UPROPERTY(Category="Interaction", EditDefaultsOnly)
 	AActor* FocusActor;
 
-	FTimerHandle OnRobotRotationTimer;
-	FTimerHandle StepFromRobotTimer;
+	FTimerHandle OnFocusTimer;
 
 	UPROPERTY(Category="Input", EditDefaultsOnly)
 	bool bIsEnableInput = true;
@@ -52,8 +51,7 @@ protected:
 
 	void InteractOnWithRobot();
 	void InteractOffWithRobot();
-	void RotateToRobot();
-	void StepBackFromRobot();
+	void FocusOnInteractableActor();
 
 public:
 	virtual void Tick(float DeltaTime) override;

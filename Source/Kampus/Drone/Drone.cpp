@@ -35,8 +35,9 @@ void ADrone::EndInteract()
 // Changes the state of the object based on the passed parameter
 void ADrone::ChangeState(ERobotStates State, float Duration)
 {
+	CurrentState = State;
 	// Depending on the state, outputs the corresponding text to the log
-	switch (State)
+	switch (CurrentState)
 	{
 	case ERobotStates::WEAP_Idle:
 		UE_LOG(LogTemp, Warning, TEXT("Robot is idle."));
@@ -44,7 +45,6 @@ void ADrone::ChangeState(ERobotStates State, float Duration)
 
 	case ERobotStates::WEAP_PlayerInteract:
 		UE_LOG(LogTemp, Warning, TEXT("Robot is interacting with player."));
-		CurrentState = ERobotStates::WEAP_PlayerInteract;
 		break;
 
 	case ERobotStates::WEAP_Talk:
@@ -72,7 +72,7 @@ void ADrone::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime); // Calls the base Tick function
 
-	if (CurrentState == ERobotStates::WEAP_PlayerInteract)
+	/*if (CurrentState == ERobotStates::WEAP_PlayerInteract)
 	{
 		// If the state is "PlayerInteract", then the following code is executed
 		// Makes the drone always look at the player
@@ -90,7 +90,7 @@ void ADrone::Tick(float DeltaTime)
 		FRotator InterpolatedRotation = FMath::RInterpTo(StartRotation, EndRotation, DeltaTime, RotationSpeed);
 		// Applies the interpolated rotation to the capsule component
 		this->GetCapsuleComponent()->SetWorldRotation(InterpolatedRotation);
-	}
+	}*/
 }
 
 // Sets up player input

@@ -14,13 +14,19 @@ class KAMPUS_API ABasicsOfProgrammingPlayerController : public APlayerController
 public:
 	// Sets default values for this actor's properties
 	ABasicsOfProgrammingPlayerController();
+	
 	bool bLeftMouseButtonPressed;
+
+
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	virtual void MouseLook();
-	virtual void SetupInputComponent() override;
 
+	virtual void SetupInputComponent() override;
+	
+	virtual void MouseLook();
+	
 	virtual void LeftMouseButtonPressed();
 	virtual void LeftMouseButtonReleased();
 public:

@@ -3,6 +3,8 @@
 
 #include "BasicsOfProgrammingGameMode.h"
 
+#include "UserWidget.h"
+
 
 // Sets default values
 ABasicsOfProgrammingGameMode::ABasicsOfProgrammingGameMode()
@@ -15,7 +17,15 @@ ABasicsOfProgrammingGameMode::ABasicsOfProgrammingGameMode()
 void ABasicsOfProgrammingGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (StartupWidget)
+	{
+		UUserWidget* StartupWidgetInstance = CreateWidget(GetWorld(), StartupWidget);
+		if (StartupWidgetInstance)
+		{
+			StartupWidgetInstance->AddToViewport();
+		}
+	}
 }
 
 // Called every frame

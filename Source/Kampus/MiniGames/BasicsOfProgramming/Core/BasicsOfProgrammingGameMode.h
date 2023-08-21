@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "BasicsOfProgrammingGameMode.generated.h"
 
+class UUserWidget;
 UCLASS()
 class KAMPUS_API ABasicsOfProgrammingGameMode : public AGameModeBase
 {
@@ -14,7 +15,9 @@ class KAMPUS_API ABasicsOfProgrammingGameMode : public AGameModeBase
 public:
 	// Sets default values for this actor's properties
 	ABasicsOfProgrammingGameMode();
-
+	
+	UPROPERTY(Category="Startup", EditDefaultsOnly)
+	TSubclassOf<UUserWidget> StartupWidget;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

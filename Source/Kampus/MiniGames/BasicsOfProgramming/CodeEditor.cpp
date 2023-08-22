@@ -4,12 +4,10 @@
 #include "CodeEditor.h"
 
 #include "ActionVisual.h"
-#include "Interfaces/CodeEntity.h"
 #include "Button.h"
 #include "CodeListing.h"
 #include "ControlledRobot.h"
 #include "IfVisual.h"
-#include "UnrealTypeTraits.h"
 #include "Engine/Engine.h"
 #include "Interfaces/Action.h"
 #include "Interfaces/IF.h"

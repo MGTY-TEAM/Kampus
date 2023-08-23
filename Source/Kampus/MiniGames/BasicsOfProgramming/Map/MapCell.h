@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MapCell.generated.h"
+
 UENUM(BlueprintType)
 enum class EMapCellType : uint8
 {
@@ -13,6 +14,7 @@ enum class EMapCellType : uint8
 	EMCT_WALL = 2 UMETA(DisplayName = "Wall"),
 	EMCT_CLEAN = 3 UMETA(DisplayName = "Clean")
 };
+
 UCLASS()
 class KAMPUS_API AMapCell : public AActor
 {
@@ -24,6 +26,15 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	EMapCellType CellType;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	USceneComponent* ModificatorSceneComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UStaticMeshComponent* WallMesh;
+	
+	void CellTypeInit(int32 Index);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

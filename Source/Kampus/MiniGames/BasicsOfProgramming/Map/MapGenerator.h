@@ -16,17 +16,21 @@ class KAMPUS_API AMapGenerator : public AActor
 public:
 	// Sets default values for this actor's properties
 	AMapGenerator();
-	
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AMapCell> CellSubClass;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void OnConstruction(const FTransform& Transform) override;
-
-	UFUNCTION(BlueprintCallable)
+	virtual void PostLoad() override;
+	virtual void PostInitializeComponents() override;
 	virtual void SaveMap();
-	
+
+
 private:
 	TArray<TArray<AMapCell*>> MapCells;
+	TArray<TArray<int32>> SerialisedMap;
 	MiniGamesDatabase* Database;
 };

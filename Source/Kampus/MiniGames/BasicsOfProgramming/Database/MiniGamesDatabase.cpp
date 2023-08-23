@@ -1,16 +1,16 @@
 ﻿#include "MiniGamesDatabase.h"
 
+#include "K2Node_DoOnceMultiInput.h"
 #include "Paths.h"
 DEFINE_LOG_CATEGORY(LogDatabase)
 
 MiniGamesDatabase::MiniGamesDatabase(FString Path, ESQLiteDatabaseOpenMode OpenMode)
 {
-	
 
 	Database = new FSQLiteDatabase();
 	if (!Database->Open(*Path, OpenMode) || !Database->IsValid())
 	{
-		UE_LOG(LogDatabase, Warning, TEXT("Failed to open database: %s"), *Database->GetLastError());
+		UE_LOG(LogDatabase, Error, TEXT("Failed to open database: %s"), *Database->GetLastError());
 	}
 	else
 	{
@@ -19,7 +19,6 @@ MiniGamesDatabase::MiniGamesDatabase(FString Path, ESQLiteDatabaseOpenMode OpenM
 		SaveStatement.Create(*Database, SaveQuery, ESQLitePreparedStatementFlags::Persistent);
 		const TCHAR* LoadQuery = TEXT("SELECT * from MapItem where MapID = $id");
 		LoadStatement.Create(*Database, LoadQuery, ESQLitePreparedStatementFlags::Persistent);
-		
 	}
 
 
@@ -35,7 +34,7 @@ MiniGamesDatabase::~MiniGamesDatabase()
 	SaveStatement.Destroy();
 	LoadStatement.Destroy();
 
-	
+
 	if (!Database->Close())
 	{
 		UE_LOG(LogDatabase, Warning, TEXT("Failed to close database: %s"), *Database->GetLastError());
@@ -73,17 +72,49 @@ bool MiniGamesDatabase::SaveMap(int32 MapId, TArray<TArray<int32>> Map)
 
 TArray<TArray<int32>> MiniGamesDatabase::LoadMap(int32 MapId)
 {
-	TArray<TArray<int32>> Map;
-	
+	TArray<int32> CellXs;
+	TArray<int32> CellYs;
+	TArray<int32> CellTypes;
 	if (Database->IsValid() && LoadStatement.IsValid())
 	{
 		LoadStatement.Reset();
- 
-		if (LoadStatement.SetBindingValueByName(TEXT("$id"), PlayerId) && LoadStatement.Execute() && LoadStatement.Step() == ESQLitePreparedStatementStepResult::Row)
+
+		if (LoadStatement.SetBindingValueByName(TEXT("$id"), MapId) && LoadStatement.Execute())
 		{
-			LoadStatement.GetColumnValueByIndex(TEXT(""))
-			LoadStatement.GetColumnValueByName(TEXT("y"), Position.Y);
-			LoadStatement.GetColumnValueByName(TEXT("z"), Position.Z);
+			while (LoadStatement.Step() == ESQLitePreparedStatementStepResult::Row)
+			{
+				int32 CellX;
+				int32 CellY;
+				int32 CellType;
+				LoadStatement.GetColumnValueByName(TEXT("CellX"), CellX);
+				LoadStatement.GetColumnValueByName(TEXT("CellY"), CellY);
+				LoadStatement.GetColumnValueByName(TEXT("CellType"), CellType);
+				CellXs.Add(CellX);
+				CellYs.Add(CellY);
+				CellTypes.Add(CellType);
+			}
+		}
+	}
+	int32 SquareSize = FMath::Sqrt(CellXs.Num());
+
+
+	TArray<TArray<int32>> Map;
+
+	int32 MapSizeX = SquareSize;
+	int32 MapSizeY = SquareSize;
+
+	Map.Init(TArray<int32>(), MapSizeX);
+
+	for (int32 X = 0; X < MapSizeX; ++X)
+	{
+		Map[X].Init(0, MapSizeY);
+	}
+
+	if (CellXs.Num() != 0 && CellYs.Num() != 0 && CellTypes.Num() != 0)
+	{
+		for (int i = 0; i < CellXs.Num(); i++)
+		{
+			Map[CellXs[i]][CellYs[i]] = CellTypes[i];
 		}
 	}
 	return Map;

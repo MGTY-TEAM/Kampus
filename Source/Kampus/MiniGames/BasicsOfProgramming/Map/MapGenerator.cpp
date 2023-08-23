@@ -4,6 +4,7 @@
 #include "MapGenerator.h"
 
 #include "Paths.h"
+#include "Engine/World.h"
 
 // Sets default values
 AMapGenerator::AMapGenerator()
@@ -17,19 +18,64 @@ void AMapGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 	Database = new MiniGamesDatabase(FPaths::GameSourceDir() + "Kampus/Data/SQLiteMiniGamesDatabase.db",
-	                                 ESQLiteDatabaseOpenMode::ReadWrite);
+									 ESQLiteDatabaseOpenMode::ReadWrite);
+
+
 	if (Database)
 	{
-		
+		TArray<TArray<int32>> SerialisedMap = Database->LoadMap(0);
+		if (SerialisedMap.Num() != 0)
+		{
+			this->SerialisedMap = SerialisedMap;
+
+			MapCells.Init(TArray<AMapCell*>(), SerialisedMap.Num());
+			for (int i = 0; i < MapCells.Num(); i++)
+			{
+				MapCells[i].Init(nullptr, SerialisedMap[i].Num());
+			}
+		}
+	}
+
+	for (int i = 0; i < MapCells.Num(); i++)
+	{
+		for (int j = 0; j < MapCells[i].Num(); j++)
+		{
+			FActorSpawnParameters SpawnParameters;
+			MapCells[i][j] = GetWorld()->SpawnActor<AMapCell>(CellSubClass, SpawnParameters);
+			MapCells[i][j]->CellTypeInit(SerialisedMap[i][j]);
+			MapCells[i][j]->SetActorLocation(FVector(GetActorLocation().X + i * 100, GetActorLocation().Y + j * 100,
+													 GetActorLocation().Z));
+			MapCells[i][j]->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+		}
 	}
 	
-	/*SaveMap();*/
+
+	
+}
+
+void AMapGenerator::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	
+	delete Database;
 }
 
 void AMapGenerator::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
+
 }
+
+void AMapGenerator::PostLoad()
+{
+	Super::PostLoad();
+}
+
+void AMapGenerator::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+}
+
 
 void AMapGenerator::SaveMap()
 {
@@ -37,7 +83,7 @@ void AMapGenerator::SaveMap()
 	Map.Init(TArray<int32>(), 10);
 	for (int j = 0; j < Map.Num(); j++)
 	{
-		for (int i = 0;  i < 10; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			Map[j].Add(0);
 		}

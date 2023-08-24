@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/Actor.h"
 #include "MapCell.generated.h"
 
+class AControlledRobot;
+class AMapGenerator;
 UENUM(BlueprintType)
 enum class EMapCellType : uint8
 {
@@ -27,14 +30,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	EMapCellType CellType;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(Category="Mesh", EditDefaultsOnly)
+	UStaticMeshComponent* BaseCellMesh;
+	UPROPERTY(Category="Connector", EditDefaultsOnly)
 	USceneComponent* ModificatorSceneComponent;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY( Category="Mesh", EditDefaultsOnly)
 	UStaticMeshComponent* WallMesh;
+	
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AControlledRobot> RobotSubclass;
 	
 	void CellTypeInit(int32 Index);
 
+	AMapGenerator* ParrentMap;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

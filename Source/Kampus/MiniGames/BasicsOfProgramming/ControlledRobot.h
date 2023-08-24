@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "ControlledRobot.generated.h"
 
+class AMapCell;
 UCLASS()
 class KAMPUS_API AControlledRobot : public AActor
 {
@@ -14,6 +15,7 @@ class KAMPUS_API AControlledRobot : public AActor
 public:
 	// Sets default values for this actor's properties
 	AControlledRobot();
+	
 //Actions
 	void Move();
 	void RotateRight();
@@ -22,6 +24,8 @@ public:
 	bool IsWallForward();
 	bool IsWallRight();
 	bool IsWallLeft();
+
+	AMapCell* CellPosition;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MapCell.h"
 #include "GameFramework/Actor.h"
 #include "MiniGames/BasicsOfProgramming/Database/MiniGamesDatabase.h"
 #include "MapGenerator.generated.h"
+
+class AMapCell;
+class AControlledRobot;
 
 UCLASS()
 class KAMPUS_API AMapGenerator : public AActor
@@ -19,6 +21,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AMapCell> CellSubClass;
+	TPair<int32, int32> GetCellIndexesByCell(AMapCell* Cell);
+	TArray<TArray<AMapCell*>> MapCells;
+	bool CanMoveToCoordinate(int32 X, int32 Y, AControlledRobot* Robot);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -26,11 +31,13 @@ protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void PostLoad() override;
 	virtual void PostInitializeComponents() override;
+
+	
 	virtual void SaveMap();
-
-
+	
+	virtual bool LoadMap();
 private:
-	TArray<TArray<AMapCell*>> MapCells;
+	
 	TArray<TArray<int32>> SerialisedMap;
 	MiniGamesDatabase* Database;
 };

@@ -49,6 +49,7 @@ void AMapCell::CellTypeInit(int32 Index)
 		{
 			CellType = EMapCellType::EMCT_PLAYER;
 			AControlledRobot* Robot = Cast<AControlledRobot>(UGameplayStatics::GetActorOfClass(GetWorld(), RobotSubclass));
+			Robot->CellPosition = this;
 			Robot->SetActorLocation(GetActorLocation());
 			break;
 		}

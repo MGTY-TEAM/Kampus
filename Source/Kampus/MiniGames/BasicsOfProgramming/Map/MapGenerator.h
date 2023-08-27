@@ -23,7 +23,11 @@ public:
 	TSubclassOf<AMapCell> CellSubClass;
 	TPair<int32, int32> GetCellIndexesByCell(AMapCell* Cell);
 	TArray<TArray<AMapCell*>> MapCells;
-	bool CanMoveToCoordinate(int32 X, int32 Y, AControlledRobot* Robot);
+	bool CanMoveToCoordinate(int32 DeltaX, int32 DeltaY, AControlledRobot* Robot);
+	TPair<int32, int32> GetRobotCoordiantes(AControlledRobot* Robot);
+	
+	bool IsWall(int32 DeltaX, int32 DeltaY, AControlledRobot* Robot);
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,3 +45,6 @@ private:
 	TArray<TArray<int32>> SerialisedMap;
 	MiniGamesDatabase* Database;
 };
+
+
+

@@ -15,40 +15,85 @@ AMapGenerator::AMapGenerator()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-bool AMapGenerator::CanMoveToCoordinate(int32 deltaX, int32 deltaY, AControlledRobot* Robot)
+bool AMapGenerator::CanMoveToCoordinate(int32 DeltaX, int32 DeltaY, AControlledRobot* Robot)
 {
-	if (!Robot)
-		return false;
+	/*MapCells[0][0]->Destroy();
+	MapCells[1][0]->Destroy();
+	MapCells[0][1]->Destroy();*/
+	
+	int32 sizeY = MapCells.Num();
+	int32 sizeX = MapCells[0].Num();
 
-	int32 sizeX = MapCells.Num();
-	int32 sizeY = MapCells[0].Num();
 
-	int32 X;
-	int32 Y;
-
-	for (int i = 0; i < MapCells.Num(); i++)
+	TPair<int32, int32> RobotCoordinates = GetRobotCoordiantes(Robot);
+	
+	int32 X = RobotCoordinates.Key;
+	int32 Y = RobotCoordinates.Value;
+	
+	
+	if ((Y +  DeltaY > 0) && (Y + DeltaY < sizeY) && (X + DeltaX > 0) && (X + DeltaX < sizeX))
 	{
-		for (int j = 0; j < MapCells[j].Num(); j++)
+		AMapCell* NextCell = MapCells[Y + DeltaY][X + DeltaX];
+		if (NextCell)
 		{
-			if (MapCells[i][j] == Robot->CellPosition)
+			if (NextCell->CellType != EMapCellType::EMCT_WALL)
 			{
-				X = i;
-				Y = j;
+				Robot->CellPosition = NextCell;
+				return Robot->SetActorLocation(NextCell->GetActorLocation());
 			}
 		}
 	}
 
-	if ((X + deltaX > 0) && (X + deltaX < sizeX) && (Y + deltaY > 0) && (Y + deltaY < sizeY))
-	{
-		AMapCell* NextCell = MapCells[X + deltaX][Y + deltaY];
+	return false;
+}
 
-		if (NextCell->CellType != EMapCellType::EMCT_WALL)
+bool AMapGenerator::IsWall(int32 DeltaX, int32 DeltaY, AControlledRobot* Robot)
+{
+	int32 sizeY = MapCells.Num();
+	int32 sizeX = MapCells[0].Num();
+
+
+	TPair<int32, int32> RobotCoordinates = GetRobotCoordiantes(Robot);
+	
+	int32 X = RobotCoordinates.Key;
+	int32 Y = RobotCoordinates.Value;
+	
+	
+	if ((Y +  DeltaY > 0) && (Y + DeltaY < sizeY) && (X + DeltaX > 0) && (X + DeltaX < sizeX))
+	{
+		AMapCell* NextCell = MapCells[Y + DeltaY][X + DeltaX];
+		if (NextCell)
 		{
-			return Robot->SetActorLocation(NextCell->GetActorLocation());
+			if (NextCell->CellType == EMapCellType::EMCT_WALL)
+			{
+				return true;
+			}
 		}
 	}
-
 	return false;
+}
+
+TPair<int32, int32> AMapGenerator::GetRobotCoordiantes(AControlledRobot* Robot)
+{
+	int32 X = 0;
+	int32 Y = 0;
+	for (int i = 0; i < MapCells.Num(); i++)
+	{
+		for (int j = 0; j < MapCells[i].Num(); j++)
+		{
+			if (MapCells[i][j] == Robot->CellPosition)
+			{
+				X = j;
+				Y = i;
+			}
+		}
+	}
+	
+	if (X < 0 || Y < 0)
+		return TPair<int32, int32>(0, 0);
+
+	return TPair<int32, int32>(X, Y);
+	
 }
 
 // Called when the game starts or when spawned
@@ -71,16 +116,12 @@ void AMapGenerator::BeginPlay()
 			{
 				FActorSpawnParameters SpawnParameters;
 				MapCells[i][j] = GetWorld()->SpawnActor<AMapCell>(CellSubClass, SpawnParameters);
+				
+				
+				MapCells[i][j]->SetActorLocation(FVector(GetActorLocation().X + j * 100, GetActorLocation().Y + i * 100,
+				                                         GetActorLocation().Z));
 				MapCells[i][j]->ParrentMap = this;
-				MapCells[i][j]->SetActorLocation(FVector(GetActorLocation().X + (i - 1) * 100,
-				                                         GetActorLocation().Y + j * 100,
-				                                         GetActorLocation().Z));
 				MapCells[i][j]->CellTypeInit(SerialisedMap[i][j]);
-				MapCells[i][j]->SetActorLocation(FVector(GetActorLocation().X + i * 100, GetActorLocation().Y + j * 100,
-				                                         GetActorLocation().Z));
-
-
-				MapCells[i][j]->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
 			}
 		}
 	}

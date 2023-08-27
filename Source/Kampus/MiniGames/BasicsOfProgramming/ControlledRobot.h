@@ -15,9 +15,11 @@ class KAMPUS_API AControlledRobot : public AActor
 public:
 	// Sets default values for this actor's properties
 	AControlledRobot();
-	
+
+	UPROPERTY(EditDefaultsOnly, Category="Scene")
+	USceneComponent* RootSceneComponent;
 //Actions
-	void Move();
+	void MoveRobot();
 	void RotateRight();
 	void RotateLeft();
 //Conditions
@@ -25,8 +27,11 @@ public:
 	bool IsWallRight();
 	bool IsWallLeft();
 
+	bool IsEnd();
 	AMapCell* CellPosition;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+private:
+	bool bIsEnd;
 };

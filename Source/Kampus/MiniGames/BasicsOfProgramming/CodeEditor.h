@@ -25,6 +25,9 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UButton* RunButton;
 
+	UPROPERTY(EditDefaultsOnly)
+	int32 StepCountLimit{32};
+	
 protected:
 	virtual void NativeOnInitialized() override;
 private:
@@ -32,6 +35,10 @@ private:
 	virtual void ParseCode(UCodeListing* CodeListing);
 	UFUNCTION()
 	virtual void RunButtonOnClick();
+	void OnEnding();
 
+	int32 StepCount;
 	AControlledRobot* ControlledRobot;
+
+	bool RobotIsEnding;
 };

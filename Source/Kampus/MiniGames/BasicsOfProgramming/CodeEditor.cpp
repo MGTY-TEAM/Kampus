@@ -4,22 +4,25 @@
 #include "CodeEditor.h"
 
 #include "ActionVisual.h"
+#include "Async.h"
 #include "Button.h"
 #include "CodeListing.h"
 #include "ControlledRobot.h"
 #include "IfVisual.h"
+#include "WhileVisual.h"
 #include "Engine/Engine.h"
 #include "Interfaces/Action.h"
 #include "Interfaces/IF.h"
 #include "Kismet/GameplayStatics.h"
-#
 
 class UActionVisual;
 
 void UCodeEditor::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
-	
+
+	StepCount = 0;
+	RobotIsEnding = false;
 	RunButton->OnClicked.AddDynamic(this, &UCodeEditor::RunButtonOnClick);
 	AActor* FoundedActor = UGameplayStatics::GetActorOfClass(GetWorld(), AControlledRobot::StaticClass());
 	if (FoundedActor)
@@ -48,6 +51,12 @@ void UCodeEditor::RunButtonOnClick()
 		UE_LOG(LogTemp, Warning, TEXT("Start Running Code"))
 	#endif
 	ParseCode(MainCodeListing);
+	
+}
+
+void UCodeEditor::OnEnding()
+{
+	RobotIsEnding = true;
 }
 
 void UCodeEditor::ParseCode(UCodeListing* CodeListing)
@@ -59,7 +68,12 @@ void UCodeEditor::ParseCode(UCodeListing* CodeListing)
 		{
 			if (CodeWidget)
 			{
-
+				if (ControlledRobot->IsEnd())
+				{
+					OnEnding();
+					return;
+				}
+				
 				UActionVisual* Action = Cast<UActionVisual>(CodeWidget);
 				if (Action)
 				{
@@ -72,7 +86,7 @@ void UCodeEditor::ParseCode(UCodeListing* CodeListing)
 						{
 						case (EActions::EA_MOVE):
 							{
-								ControlledRobot->Move();
+								ControlledRobot->MoveRobot();
 								break;
 							}
 						case (EActions::EA_ROTATE_RIGHT):
@@ -116,10 +130,23 @@ void UCodeEditor::ParseCode(UCodeListing* CodeListing)
 								break;
 							}
 						}
-						if (bCondition)
+						if (!bCondition)
 						{
 							ParseCode(If->TrueCodeListing);
 						}
+					}
+				}
+				
+				UWhileVisual* While = Cast<UWhileVisual>(CodeWidget);
+
+				if (While)
+				{
+#if WITH_EDITOR	
+					UE_LOG(LogTemp, Warning, TEXT("Parser: While (%s)"), *While->GetName());
+#endif
+					while(!RobotIsEnding)
+					{
+						ParseCode(While->TrueCodeListing);
 					}
 				}
 			}

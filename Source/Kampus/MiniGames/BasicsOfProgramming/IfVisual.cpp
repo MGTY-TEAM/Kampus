@@ -34,8 +34,10 @@ void UIfVisual::NativeOnInitialized()
 		ConditionSelector->AddOption(OptionToCondition.Key);
 	}
 	
-	ConditionSelector->SetSelectedIndex(0);
+
+	Condition = EConditions::EFC_WALL_FORWARD;
 	
+	ConditionSelector->SetSelectedIndex(0);
 	ConditionSelector->OnSelectionChanged.AddDynamic(this, &UIfVisual::ConditionSelectorOnChanged);
 
 	ElseCheckBox->OnCheckStateChanged.AddDynamic(this, &UIfVisual::ElseCheckBoxOnChanged);

@@ -11,8 +11,9 @@
 UENUM(BlueprintType)
 enum class ERobotStates : uint8
 {
-  WEAP_Idle	UMETA(DisplayName = "Idle"),
-  WEAP_PlayerInteract	UMETA(DisplayName = "PlayerInteract"),
-  WEAP_Talk	UMETA(DisplayName = "Talk"),
-  WEAP_Loading	UMETA(DisplayName = "Loading"),
+  Drone_Idle	UMETA(DisplayName = "Idle"),
+  Drone_PlayerInteract	UMETA(DisplayName = "PlayerInteract"),
+  Drone_Talk	UMETA(DisplayName = "Talk"),
+  Drone_Loading	UMETA(DisplayName = "Loading"),
+	Drone_Follow UMETA(Displayname = "PlayerFollow"),
 };

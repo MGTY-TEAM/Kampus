@@ -11,7 +11,7 @@
 
 UDroneIdleAnim::UDroneIdleAnim(FObjectInitializer const& ObjectInitializer)
 {
-	NodeName
+
 }
 
 EBTNodeResult::Type UDroneIdleAnim::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)

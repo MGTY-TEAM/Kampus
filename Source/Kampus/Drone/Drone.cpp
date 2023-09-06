@@ -8,6 +8,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Core/BaseFirstPersonCharacter.h"
 #include "GameFramework/PlayerController.h"
+#include "TimerManager.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -23,13 +24,15 @@ ADrone::ADrone()
 // Function is called when interaction happens
 void ADrone::Interact()
 {
-	ChangeState(ERobotStates::WEAP_PlayerInteract); // Changes the state to "PlayerInteract"
+	ChangeState(ERobotStates::Drone_PlayerInteract); // Changes the state to "PlayerInteract"
 }
 
 // Function is called when interaction ends
 void ADrone::EndInteract()
 {
-	ChangeState(ERobotStates::WEAP_Idle); // Changes the state to "Idle"
+	ChangeState(ERobotStates::Drone_Idle); // Changes the state to "Idle"
+	UE_LOG(LogTemp, Warning, TEXT("EndInteract"));
+	GetWorldTimerManager().ClearTimer(RotateToPlayer_Timer);
 }
 
 // Changes the state of the object based on the passed parameter
@@ -37,25 +40,31 @@ void ADrone::ChangeState(ERobotStates State, float Duration)
 {
 	CurrentState = State;
 	// Depending on the state, outputs the corresponding text to the log
-	switch (CurrentState)
-	{
-	case ERobotStates::WEAP_Idle:
-		UE_LOG(LogTemp, Warning, TEXT("Robot is idle."));
-		break;
+}
 
-	case ERobotStates::WEAP_PlayerInteract:
-		UE_LOG(LogTemp, Warning, TEXT("Robot is interacting with player."));
-		break;
+void ADrone::IdleAnim()
+{
+	GetWorld()->GetTimerManager().SetTimer(IdleAnim_Timer, this, &ADrone::IdleAnim, 0.01f, true);
+	float TimeSeconds = GetWorld()->GetTimeSeconds();
+	float Movement = (sin(TimeSeconds * Frecuency) * Amplitude) + Robot->GetComponentLocation().Z;
+	Robot->SetWorldLocation(FVector(Robot->GetComponentLocation().X, Robot->GetComponentLocation().Y, Movement));
+}
 
-	case ERobotStates::WEAP_Talk:
-		UE_LOG(LogTemp, Warning, TEXT("Robot is talking."));
-		break;
+void ADrone::RotateToPlayer()
+{
+	GetWorld()->GetTimerManager().SetTimer(RotateToPlayer_Timer, this, &ADrone::RotateToPlayer, 0.01f, true);
+	FVector StartLocation = GetCapsuleComponent()->GetComponentLocation(); // Starting position of the drone
+	FVector TargetLocation = PlayerCharacter->GetActorLocation(); // Player's position
 
-	case ERobotStates::WEAP_Loading:
-		UE_LOG(LogTemp, Warning, TEXT("Robot is loading."));
-		break;
-		
-	}
+	FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(StartLocation, TargetLocation); // Calculates the look-at vector from the drone to the player
+	
+	FRotator StartRotation = GetCapsuleComponent()->GetComponentRotation(); // Starting rotation of the drone
+	FRotator EndRotation = LookAtRotation; // Final rotation - look at the player
+
+	// Calculates the interpolated rotation
+	FRotator InterpolatedRotation = FMath::RInterpTo(StartRotation, EndRotation, GetWorld()->GetDeltaSeconds(), RotationSpeed);
+	// Applies the interpolated rotation to the capsule component
+	GetCapsuleComponent()->SetWorldRotation(InterpolatedRotation);
 }
 
 // Called at the start of the game
@@ -63,34 +72,38 @@ void ADrone::BeginPlay()
 {
 	Super::BeginPlay(); // Calls the base BeginPlay function
 
+	ChangeState(ERobotStates::Drone_Idle, 0.0f);
 	PlayerCharacter = Cast<ABaseFirstPersonCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn()); // Gets the player
-	
 }
 
 // Called every frame
 void ADrone::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime); // Calls the base Tick function
-
-	/*if (CurrentState == ERobotStates::WEAP_PlayerInteract)
-	{
-		// If the state is "PlayerInteract", then the following code is executed
-		// Makes the drone always look at the player
-
-		FVector StartLocation = this->GetCapsuleComponent()->GetComponentLocation(); // Starting position of the drone
-		FVector TargetLocation = PlayerCharacter->GetActorLocation(); // Player's position
-
-		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(StartLocation, TargetLocation); // Calculates the look-at vector from the drone to the player
 	
-		FRotator StartRotation = this->GetCapsuleComponent()->GetComponentRotation(); // Starting rotation of the drone
-		FRotator EndRotation = LookAtRotation; // Final rotation - look at the player
-		RotationSpeed = 1.0f; // Rotation speed
+	switch (CurrentState)
+	{
+	case ERobotStates::Drone_Idle:
+		UE_LOG(LogTemp, Warning, TEXT("Robot is idle."));
+		break;
 
-		// Calculates the interpolated rotation
-		FRotator InterpolatedRotation = FMath::RInterpTo(StartRotation, EndRotation, DeltaTime, RotationSpeed);
-		// Applies the interpolated rotation to the capsule component
-		this->GetCapsuleComponent()->SetWorldRotation(InterpolatedRotation);
-	}*/
+	case ERobotStates::Drone_PlayerInteract:
+		UE_LOG(LogTemp, Warning, TEXT("Robot is interacting with player."));
+		RotateToPlayer();
+		break;
+
+	case ERobotStates::Drone_Talk:
+		UE_LOG(LogTemp, Warning, TEXT("Robot is talking."));
+		break;
+
+	case ERobotStates::Drone_Loading:
+		UE_LOG(LogTemp, Warning, TEXT("Robot is loading."));
+		break;
+
+	case ERobotStates::Drone_Follow:
+		UE_LOG(LogTemp, Warning, TEXT("Robot is Following."));
+		break;
+	}
 }
 
 // Sets up player input

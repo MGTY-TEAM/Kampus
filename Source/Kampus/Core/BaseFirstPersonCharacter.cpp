@@ -65,6 +65,7 @@ void ABaseFirstPersonCharacter::Interact()
 					if (bIsRobotInteracts)
 					{
 						InteractOffWithRobot();
+						InteractableObject->EndInteract();
 					}
 					else
 					{
@@ -184,7 +185,7 @@ void ABaseFirstPersonCharacter::FocusOnInteractableActor()
 			// Calculate target location
 			FVector DesiredLocation  = this->GetCapsuleComponent()->GetForwardVector() * 300;
 			FVector EndLocation = FVector(DesiredLocation.X * -1,DesiredLocation.Y * -1, DesiredLocation.Z) + StartLocation;
-			float StepSpeed = 1.0f;
+			float StepSpeed = 0.5f;
 			
 			// Interpolate between current location and target location
 			FVector InterpolatedVector = FMath::VInterpTo(StartLocation, EndLocation, GetWorld()->GetDeltaSeconds(),StepSpeed);

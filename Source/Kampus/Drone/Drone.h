@@ -26,13 +26,24 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	float RotationSpeed;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sin")
+	float Frecuency;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sin")
+	float Amplitude;
+
 	ERobotStates CurrentState;
 
 	ABaseFirstPersonCharacter* PlayerCharacter;
 
+	FTimerHandle IdleAnim_Timer;
+	FTimerHandle RotateToPlayer_Timer;
+
 	virtual void Interact() override;
 	virtual void EndInteract() override;
 	void ChangeState(ERobotStates State, float Duration = 0);
+
+	void IdleAnim();
+	void RotateToPlayer();
 
 protected:
 	virtual void BeginPlay() override;

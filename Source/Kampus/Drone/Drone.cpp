@@ -84,24 +84,24 @@ void ADrone::Tick(float DeltaTime)
 	switch (CurrentState)
 	{
 	case ERobotStates::Drone_Idle:
-		UE_LOG(LogTemp, Warning, TEXT("Robot is idle."));
+		//UE_LOG(LogTemp, Warning, TEXT("Robot is idle."));
 		break;
 
 	case ERobotStates::Drone_PlayerInteract:
-		UE_LOG(LogTemp, Warning, TEXT("Robot is interacting with player."));
+		//UE_LOG(LogTemp, Warning, TEXT("Robot is interacting with player."));
 		RotateToPlayer();
 		break;
 
 	case ERobotStates::Drone_Talk:
-		UE_LOG(LogTemp, Warning, TEXT("Robot is talking."));
+		//UE_LOG(LogTemp, Warning, TEXT("Robot is talking."));
 		break;
 
 	case ERobotStates::Drone_Loading:
-		UE_LOG(LogTemp, Warning, TEXT("Robot is loading."));
+		//UE_LOG(LogTemp, Warning, TEXT("Robot is loading."));
 		break;
 
 	case ERobotStates::Drone_Follow:
-		UE_LOG(LogTemp, Warning, TEXT("Robot is Following."));
+		//UE_LOG(LogTemp, Warning, TEXT("Robot is Following."));
 		break;
 	}
 }

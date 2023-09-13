@@ -16,6 +16,11 @@ class KAMPUS_API UChatBox : public UUserWidget
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
+	TSubclassOf<UUserWidget> BlueprintWidgetClass;
+
+	
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* ParentPanel;
 	UPROPERTY(meta = (BindWidget))
@@ -48,7 +53,9 @@ protected:
 	UFUNCTION()
 	void SendMessageButtonClicked();
 
-	UFUNCTION()
-	void OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+	//UFUNCTION()
+	//void OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
+
+	void SendMessage(FText Text);
 	
 };

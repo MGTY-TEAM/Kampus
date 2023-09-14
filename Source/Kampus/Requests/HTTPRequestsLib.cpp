@@ -11,7 +11,7 @@
 #include "JsonSerializer.h"
 DEFINE_LOG_CATEGORY(LogRequests);
 
-void UHTTPRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString&)> CallBack, const FString& StringRequest)
+void UHTTPRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString&)> CallBack, const FString& StringRequest, const FString& URL)
 {
 	FHttpModule* Module = &FHttpModule::Get();
 	auto Request = Module->CreateRequest();
@@ -29,9 +29,7 @@ void UHTTPRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString&)> CallB
 			}
 		});
 	FString EncodedStringRequest = FGenericPlatformHttp::UrlEncode(StringRequest);
-	FString URL = TEXT(
-			"http://bot.jaicp.com/chatapi/WeapHmVI:3be9dbbc1eb926dd43ec452b0d54f3ebda7ff9de?clientId=test&query=")
-		+ EncodedStringRequest;
+	FString FULL_URL = URL + "&query=" + EncodedStringRequest;
 	Request->SetURL(URL);
 	Request->SetVerb(TEXT("GET"));
 	Request->SetHeader(TEXT("Content-Type"),TEXT("application/json"));

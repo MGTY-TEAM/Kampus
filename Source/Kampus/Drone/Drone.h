@@ -23,15 +23,21 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent* Face;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
 	float RotationSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sin")
-	float Frecuency;
+	float Frecuency1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Sin")
-	float Amplitude;
+	float Amplitude1;
 
 	ERobotStates CurrentState;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KeyWords")
+	TArray<FText> KeyWords;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
+	TSubclassOf<UUserWidget> BlueprintChatClass;
 
 	ABaseFirstPersonCharacter* PlayerCharacter;
 

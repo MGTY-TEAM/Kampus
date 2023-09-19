@@ -46,8 +46,9 @@ void ADrone::IdleAnim()
 {
 	GetWorld()->GetTimerManager().SetTimer(IdleAnim_Timer, this, &ADrone::IdleAnim, 0.01f, true);
 	float TimeSeconds = GetWorld()->GetTimeSeconds();
-	float Movement = (sin(TimeSeconds * Frecuency) * Amplitude) + Robot->GetComponentLocation().Z;
+	float Movement = (sin(TimeSeconds * Frecuency1) * Amplitude1) + Robot->GetComponentLocation().Z;
 	Robot->SetWorldLocation(FVector(Robot->GetComponentLocation().X, Robot->GetComponentLocation().Y, Movement));
+	UE_LOG(LogTemp, Warning, TEXT("Idle"));
 }
 
 void ADrone::RotateToPlayer()
@@ -84,7 +85,8 @@ void ADrone::Tick(float DeltaTime)
 	switch (CurrentState)
 	{
 	case ERobotStates::Drone_Idle:
-		//UE_LOG(LogTemp, Warning, TEXT("Robot is idle."));
+		//UE_LOG(LogTemp, Warning, TEXT("Robot is idle.")); 
+		IdleAnim();
 		break;
 
 	case ERobotStates::Drone_PlayerInteract:

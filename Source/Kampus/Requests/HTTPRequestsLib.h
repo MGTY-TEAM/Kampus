@@ -15,4 +15,5 @@ class KAMPUS_API UHTTPRequestsLib : public UObject
 	GENERATED_BODY()
 public:
 	static void AIMyLogicGetRequest(TFunction<void(const FString&) > CallBack,const FString& StringRequest);
+	
 };

@@ -57,5 +57,7 @@ protected:
 	//void OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 
 	void SendMessage(FText Text);
+
+	void BotResponse(const FString& Result);
 	
 };

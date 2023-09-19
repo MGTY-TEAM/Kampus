@@ -15,7 +15,10 @@ public class Kampus : ModuleRules
 			"HeadMountedDisplay",
 			"AIModule",
 			"GameplayTasks",
-			"NavigationSystem"
+			"NavigationSystem",
+			"HTTP",
+			"Json",
+			"JsonUtilities"
 		});
 
 		// Uncomment if you are using Slate UI

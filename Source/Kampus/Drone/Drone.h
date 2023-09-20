@@ -4,11 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "RobotStates.h"
-#include "Core/BaseFirstPersonCharacter.h"
+#include "TeleportationPlane.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/Interaction/Interactable.h"
 
+
 #include "Drone.generated.h"
+
+
+class UChatBox;
+
+class ABaseFirstPersonCharacter;
 
 UCLASS()
 class KAMPUS_API ADrone : public ACharacter, public IInteractable
@@ -34,15 +40,30 @@ public:
 	ERobotStates CurrentState;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KeyWords")
-	TArray<FText> KeyWords;
+	TArray<FString> KeyWordsForTeleportation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KeyWords")
+	TArray<FString> KeyWordsPlaces;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KeyWords")
+	FString BotURL;
+	UPROPERTY(EditAnywhere, Category="KeyWords")
+	TArray<AActor*> TeleportationPlaces;
+	UPROPERTY(EditDefaultsOnly, Category="KeyWords")
+	ATeleportationPlane* TeleportationPlace;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
 	TSubclassOf<UUserWidget> BlueprintChatClass;
-
+	UPROPERTY(EditDefaultsOnly,Category="Widget")
+	UChatBox* ChatWidget;
+	
+	UPROPERTY(EditDefaultsOnly,Category="Character")
 	ABaseFirstPersonCharacter* PlayerCharacter;
 
 	FTimerHandle IdleAnim_Timer;
 	FTimerHandle RotateToPlayer_Timer;
+
+	UFUNCTION()
+	void TeleportToLocation(int index);
 
 	virtual void Interact() override;
 	virtual void EndInteract() override;

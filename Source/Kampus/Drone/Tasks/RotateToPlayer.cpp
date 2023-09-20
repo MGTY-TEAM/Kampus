@@ -20,7 +20,7 @@ EBTNodeResult::Type URotateToPlayer::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	auto const Controller = Cast<ADroneAIController>(OwnerComp.GetAIOwner());
 	auto const NPC = Controller->GetPawn();
 	auto const Drone = Cast<ADrone>(NPC);
-	auto const PlayerCharacter = Cast<ABaseFirstPersonCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	//auto const PlayerCharacter = Cast<ABaseFirstPersonCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 
 	bool finish = false;
 	/*if(Drone != nullptr && Drone->CurrentState == ERobotStates::Drone_PlayerInteract)

@@ -8,11 +8,14 @@
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
 #include "TokenizedMessage.h"
+#include "Components/StaticMeshComponent.h"
 #include "Drone/Drone.h"
 #include "Engine/Engine.h"
 #include "Entity/Interactable/InteractableActor.h"
 #include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "UserInterface/ChatBox.h"
 
 // Constructor
 ABaseFirstPersonCharacter::ABaseFirstPersonCharacter()
@@ -33,6 +36,12 @@ void ABaseFirstPersonCharacter::BeginPlay()
 
 	// Set up timers for robot interaction functions
 	GetWorldTimerManager().SetTimer(OnFocusTimer, this, &ABaseFirstPersonCharacter::FocusOnInteractableActor, 0.01f, true, 0.0f);
+	Drone = Cast<ADrone>(UGameplayStatics::GetActorOfClass(GetWorld(), ADrone::StaticClass()));
+	
+	if (Drone->ChatWidget)
+	{
+		Drone->ChatWidget->TeleportationEvent.AddDynamic(this, &ABaseFirstPersonCharacter::TeleportToLocation);
+	}
 	
 }
 
@@ -93,6 +102,16 @@ void ABaseFirstPersonCharacter::SetupPlayerInputComponent(UInputComponent* Playe
 	PlayerInputComponent->BindAxis("RightAxis", this, &ABaseFirstPersonCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("MouseX", this, &ABaseFirstPersonCharacter::LookRight);
 	PlayerInputComponent->BindAxis("MouseY", this, &ABaseFirstPersonCharacter::LookUp);
+}
+
+void ABaseFirstPersonCharacter::TeleportToLocation(int index)
+{
+	PlayerTeleportationPlace = Cast<ATeleportationPlane>(Drone->TeleportationPlaces[index]);
+	if (PlayerTeleportationPlace)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PlayerTeleport"));
+		SetActorLocation(PlayerTeleportationPlace->PlayerPlane->GetComponentLocation());
+	}
 }
 
 // Movement and look functions

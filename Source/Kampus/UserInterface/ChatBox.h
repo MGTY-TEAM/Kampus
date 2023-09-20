@@ -5,11 +5,16 @@
 #include "CoreMinimal.h"
 
 #include "Blueprint/UserWidget.h"
+#include "Drone/Drone.h"
+#include "Kismet/GameplayStatics.h"
 #include "ChatBox.generated.h"
 
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTeleportationDelegate, int, index);
+
 UCLASS()
 class KAMPUS_API UChatBox : public UUserWidget
 {
@@ -20,6 +25,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
 	TSubclassOf<UUserWidget> BlueprintWidgetClass;
 
+	ADrone* Drone;
+
+	bool bCanRobotMoveToLocation = false;
 	
 	UPROPERTY(meta = (BindWidget))
 	class UCanvasPanel* ParentPanel;
@@ -42,6 +50,9 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UScrollBox* Chat_ScrollBox;
 
+	UPROPERTY(BlueprintAssignable, Category="Dispatcher")
+	FTeleportationDelegate TeleportationEvent;
+
 
 protected:
 	UFUNCTION()
@@ -56,8 +67,9 @@ protected:
 	//UFUNCTION()
 	//void OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod);
 
-	void SendMessage(FText Text);
+	void SendMessage(FText Message, FText Sender);
 
 	void BotResponse(const FString& Result);
+
 	
 };

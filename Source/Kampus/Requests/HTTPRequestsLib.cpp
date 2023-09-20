@@ -30,7 +30,7 @@ void UHTTPRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString&)> CallB
 		});
 	FString EncodedStringRequest = FGenericPlatformHttp::UrlEncode(StringRequest);
 	FString FULL_URL = URL + "&query=" + EncodedStringRequest;
-	Request->SetURL(URL);
+	Request->SetURL(FULL_URL);
 	Request->SetVerb(TEXT("GET"));
 	Request->SetHeader(TEXT("Content-Type"),TEXT("application/json"));
 	Request->ProcessRequest();

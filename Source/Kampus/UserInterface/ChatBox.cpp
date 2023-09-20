@@ -33,8 +33,6 @@ void UChatBox::NativeConstruct()
 	SendMessage_Button->OnClicked.AddDynamic(this, &UChatBox::SendMessageButtonClicked);
 
 	Super::NativeConstruct();
-
-	
 }
 
 void UChatBox::SendMessageButtonClicked()
@@ -68,6 +66,7 @@ void UChatBox::SendMessage(FText Message, FText Sender)
 		WidgetInstance->AddToViewport();
 		Chat_ScrollBox->AddChild(WidgetInstance);
 		WidgetInstance->Message->SetText(Message);
+		WidgetInstance->Sender->SetText(Sender);
 		SendMessage_TextBox->SetText(FText::GetEmpty());
 	}
 }

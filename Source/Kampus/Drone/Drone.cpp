@@ -31,14 +31,18 @@ void ADrone::TeleportToLocation(int index)
 	{
 		SetActorLocation(TeleportationPlace->RobotPlane->GetComponentLocation());
 	}
-
 }
 
 // Function is called when interaction happens
 void ADrone::Interact()
 {
-	ChangeState(ERobotStates::Drone_PlayerInteract); // Changes the state to "PlayerInteract"
-	ChatWidget->AddToPlayerScreen();
+	ChangeState(ERobotStates::Drone_PlayerInteract);// Changes the state to "PlayerInteract"
+	if (!ChatWidget->IsInViewport())
+	{
+		ChatWidget->AddToPlayerScreen();
+		UE_LOG(LogTemp, Warning, TEXT("AddToScreen"));
+	}
+	ChatWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 // Function is called when interaction ends
@@ -47,7 +51,7 @@ void ADrone::EndInteract()
 	ChangeState(ERobotStates::Drone_Idle); // Changes the state to "Idle"
 	UE_LOG(LogTemp, Warning, TEXT("EndInteract"));
 	GetWorldTimerManager().ClearTimer(RotateToPlayer_Timer);
-	ChatWidget->RemoveFromParent();
+	ChatWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 // Changes the state of the object based on the passed parameter

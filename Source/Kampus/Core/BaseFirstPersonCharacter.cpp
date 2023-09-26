@@ -38,11 +38,6 @@ void ABaseFirstPersonCharacter::BeginPlay()
 	GetWorldTimerManager().SetTimer(OnFocusTimer, this, &ABaseFirstPersonCharacter::FocusOnInteractableActor, 0.01f, true, 0.0f);
 	Drone = Cast<ADrone>(UGameplayStatics::GetActorOfClass(GetWorld(), ADrone::StaticClass()));
 	
-	if (Drone->ChatWidget)
-	{
-		Drone->ChatWidget->TeleportationEvent.AddDynamic(this, &ABaseFirstPersonCharacter::TeleportToLocation);
-	}
-	
 }
 
 // Function for interaction

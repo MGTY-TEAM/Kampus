@@ -10,13 +10,6 @@
 
 ADroneAIController::ADroneAIController(FObjectInitializer const& Object_Initializer)
 {
-	ConstructorHelpers::FObjectFinder<UBehaviorTree> obj(TEXT("BehaviorTree'/Game/Blueprints/Drone/BehaviorTree/BT_Drone.BT_Drone'"));
-	if(obj.Succeeded())
-	{
-		BTree = obj.Object;
-	}
-	BehaviorTreeComponent = Object_Initializer.CreateDefaultSubobject<UBehaviorTreeComponent>(this, TEXT("BehaviorTree"));
-	
 }
 
 void ADroneAIController::BeginPlay()

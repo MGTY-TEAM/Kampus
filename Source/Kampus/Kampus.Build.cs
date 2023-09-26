@@ -18,7 +18,9 @@ public class Kampus : ModuleRules
 			"NavigationSystem",
 			"HTTP",
 			"Json",
-			"JsonUtilities"
+			"JsonUtilities",
+			"Slate",
+			"SlateCore"
 		});
 
 		// Uncomment if you are using Slate UI

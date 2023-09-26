@@ -37,6 +37,7 @@ void ADrone::TeleportToLocation(int index)
 void ADrone::Interact()
 {
 	ChangeState(ERobotStates::Drone_PlayerInteract);// Changes the state to "PlayerInteract"
+	ChatWidget = CreateWidget<UChatBox>(GetWorld()->GetFirstPlayerController(), BlueprintChatClass);
 	if (!ChatWidget->IsInViewport())
 	{
 		ChatWidget->AddToPlayerScreen();
@@ -58,7 +59,25 @@ void ADrone::EndInteract()
 void ADrone::ChangeState(ERobotStates State, float Duration)
 {
 	CurrentState = State;
-	// Depending on the state, outputs the corresponding text to the log
+	switch (CurrentState)
+	{
+	case ERobotStates::Drone_Idle:
+		IdleAnim();
+		break;
+
+	case ERobotStates::Drone_PlayerInteract:
+		RotateToPlayer();
+		break;
+
+	case ERobotStates::Drone_Talk:
+		break;
+
+	case ERobotStates::Drone_Loading:
+		break;
+
+	case ERobotStates::Drone_Follow:
+		break;
+	}
 }
 
 void ADrone::IdleAnim()
@@ -93,7 +112,7 @@ void ADrone::BeginPlay()
 
 	ChangeState(ERobotStates::Drone_Idle, 0.0f);
 	PlayerCharacter = Cast<ABaseFirstPersonCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	ChatWidget = CreateWidget<UChatBox>(GetWorld()->GetFirstPlayerController(), BlueprintChatClass);
+	
 	if (ChatWidget)
 	{
 		ChatWidget->TeleportationEvent.AddDynamic(this, &ADrone::TeleportToLocation);
@@ -105,30 +124,7 @@ void ADrone::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime); // Calls the base Tick function
 	
-	switch (CurrentState)
-	{
-	case ERobotStates::Drone_Idle:
-		//UE_LOG(LogTemp, Warning, TEXT("Robot is idle.")); 
-		IdleAnim();
-		break;
-
-	case ERobotStates::Drone_PlayerInteract:
-		//UE_LOG(LogTemp, Warning, TEXT("Robot is interacting with player."));
-		RotateToPlayer();
-		break;
-
-	case ERobotStates::Drone_Talk:
-		//UE_LOG(LogTemp, Warning, TEXT("Robot is talking."));
-		break;
-
-	case ERobotStates::Drone_Loading:
-		//UE_LOG(LogTemp, Warning, TEXT("Robot is loading."));
-		break;
-
-	case ERobotStates::Drone_Follow:
-		//UE_LOG(LogTemp, Warning, TEXT("Robot is Following."));
-		break;
-	}
+	
 }
 
 // Sets up player input

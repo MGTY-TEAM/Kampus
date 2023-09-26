@@ -8,8 +8,8 @@
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
 #include "TokenizedMessage.h"
+#include "AI/AIDrone/DroneGuide.h"
 #include "Components/StaticMeshComponent.h"
-#include "Drone/Drone.h"
 #include "Engine/Engine.h"
 #include "Entity/Interactable/InteractableActor.h"
 #include "GameFramework/PlayerController.h"
@@ -63,7 +63,7 @@ void ABaseFirstPersonCharacter::Interact()
 				// If the object is interactable, interact with it
 				FocusActor = OutHit.GetActor();
 				InteractableObject->Interact();
-				if (Cast<ADrone>(OutHit.Actor))
+				if (Cast<ADroneGuide>(OutHit.Actor))
 				{
 					// If the object is a drone, check whether the character is already interacting with the robot
 					if (bIsRobotInteracts)

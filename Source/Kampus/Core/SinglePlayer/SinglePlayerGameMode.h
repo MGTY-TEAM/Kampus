@@ -15,5 +15,5 @@ class KAMPUS_API ASinglePlayerGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 protected:
-	virtual void OnBeginPlay();
+	virtual void BeginPlay() override;;
 };

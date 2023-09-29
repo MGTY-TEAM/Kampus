@@ -1,0 +1,41 @@
+﻿// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Engine/GameInstance.h"
+#include "UserGameInstance.generated.h"
+
+/**
+ * 
+ */
+
+USTRUCT(BlueprintType)
+struct FUserInfo
+{
+	GENERATED_BODY()
+	UPROPERTY(BlueprintReadOnly, Category = "User") FString Nickname;
+	UPROPERTY(BlueprintReadOnly, Category = "User") FString Email;
+};
+
+UCLASS()
+class KAMPUS_API UUserGameInstance : public UGameInstance
+{
+	GENERATED_BODY()
+
+
+public:
+	/**
+	 * @brief Get user info.
+	 * @return FUserInfo struct which containing user info.
+	 */
+	const FUserInfo& GetUserInfo() const;
+
+	void SetUserToken(const FString& Token);
+
+	void InitializeUserInfo();
+
+private:
+	FUserInfo M_UserInfo;
+	FString M_UserToken;
+};

@@ -59,6 +59,7 @@ void UHTTPGameAPIRequestsLib::GameAPILoginRequest(
 		Request->SetURL(URL);
 		Request->SetVerb(TEXT("Post"));
 		Request->SetHeader(TEXT("Content-Type"),TEXT("application/json"));
+		Request->SetHeader(TEXT("Accept"),TEXT("application/json"));
 		Request->SetContentAsString(RequestString);
 		Request->ProcessRequest();
 	}
@@ -84,6 +85,7 @@ void UHTTPGameAPIRequestsLib::GameAPIRegisterRequest(
 					FRegisterResponse RegisterResponse;
 					GetStructFromJsonString(Response->GetContentAsString(), RegisterResponse);
 					UE_LOG(HTTPGameApiLog, Log, TEXT("Register Response token: %s "), *RegisterResponse.Token);
+					CallBack(true, RegisterResponse, FRegisterErrorResponse());
 				}
 				break;
 			case 400:
@@ -91,6 +93,7 @@ void UHTTPGameAPIRequestsLib::GameAPIRegisterRequest(
 					FRegisterErrorResponse ErrorResponse;
 					GetStructFromJsonString(Response->GetContentAsString(), ErrorResponse);
 					UE_LOG(HTTPGameApiLog, Error, TEXT("Register Error: %s"), *ErrorResponse.Error);
+					CallBack(true, FRegisterResponse(), ErrorResponse);
 					break;
 				}
 			default:
@@ -130,6 +133,7 @@ void UHTTPGameAPIRequestsLib::GameAPIUserInfoRequest(
 					FUserInfoResponse UserInfoResponse;
 					GetStructFromJsonString(Response->GetContentAsString(), UserInfoResponse);
 					UE_LOG(HTTPGameApiLog, Log, TEXT("User Info Response Nickname: %s "), *UserInfoResponse.Nickname);
+					CallBack(true, UserInfoResponse, FUserInfoErrorResponse());
 				}
 				break;
 			case 400:
@@ -137,6 +141,7 @@ void UHTTPGameAPIRequestsLib::GameAPIUserInfoRequest(
 					FUserInfoErrorResponse ErrorResponse;
 					GetStructFromJsonString(Response->GetContentAsString(), ErrorResponse);
 					UE_LOG(HTTPGameApiLog, Error, TEXT("User Info Response Error: %s"), *ErrorResponse.Error);
+					CallBack(true, FUserInfoResponse(), ErrorResponse); 
 					break;
 				}
 			default:

@@ -32,7 +32,9 @@ public:
 	const FUserInfo& GetUserInfo() const;
 
 	void SetUserToken(const FString& Token);
+	const FString& GetUserToken() const;
 
+	void TryToGetUserInfo();
 	void InitializeUserInfo();
 
 private:

@@ -13,7 +13,7 @@
 AStartupEntryGameMode::AStartupEntryGameMode()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
+	
 }
 
 void AStartupEntryGameMode::BeginPlay()

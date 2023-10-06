@@ -6,6 +6,7 @@
 #include "Button.h"
 #include "EditableTextBox.h"
 #include "FormFieldsValidatorLib.h"
+#include "TextBlock.h"
 #include "Engine/Engine.h"
 #include "Requests/GameAPI/HTTPGameAPIRequestsLib.h"
 
@@ -23,15 +24,22 @@ void ULoginWidget::OnLoginButtonClicked()
 		FLoginRequest LoginRequest;
 		LoginRequest.Login =  GetStringValueFromEditableTextBox(LoginText);
 		LoginRequest.Password = GetStringValueFromEditableTextBox(PasswordText);
-		UHTTPGameAPIRequestsLib::GameAPILoginRequest([=](const bool& bSuccess, const FLoginResponse& LoginResponse, const FLoginErrorResponse&)
+		UHTTPGameAPIRequestsLib::GameAPILoginRequest([=](const bool& bSuccess, const FLoginResponse& LoginResponse, const FLoginErrorResponse& LoginErrorResponse)
 		{
 			if (bSuccess)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Success login")));
 				UE_LOG(LogTemp, Warning, TEXT("Token: %s"), *LoginResponse.Token);
 				OnFormExecute.Broadcast(LoginResponse.Token);
 			}
+			else
+			{
+				ErrorText->SetText(FText::FromString(LoginErrorResponse.Error));
+			}
 		},LoginRequest);
+	}
+	else
+	{
+		ErrorText->SetText(FText::FromString("Invalid login fields!"));
 	}
 }
 

@@ -93,7 +93,7 @@ void UHTTPGameAPIRequestsLib::GameAPIRegisterRequest(
 					FRegisterErrorResponse ErrorResponse;
 					GetStructFromJsonString(Response->GetContentAsString(), ErrorResponse);
 					UE_LOG(HTTPGameApiLog, Error, TEXT("Register Error: %s"), *ErrorResponse.Error);
-					CallBack(true, FRegisterResponse(), ErrorResponse);
+					CallBack(false, FRegisterResponse(), ErrorResponse);
 					break;
 				}
 			default:
@@ -115,7 +115,7 @@ void UHTTPGameAPIRequestsLib::GameAPIRegisterRequest(
 
 void UHTTPGameAPIRequestsLib::GameAPIUserInfoRequest(
 	TFunction<void(const bool&, const FUserInfoResponse&, const FUserInfoErrorResponse&)> CallBack,
-	const FUserInfoResponse& UserInfoRequest)
+	const FUserInfoRequest& UserInfoRequest)
 {
 	FString URL = "http://localhost:3000/api/user-info";
 	FHttpModule* Module = &FHttpModule::Get();
@@ -132,7 +132,7 @@ void UHTTPGameAPIRequestsLib::GameAPIUserInfoRequest(
 				{
 					FUserInfoResponse UserInfoResponse;
 					GetStructFromJsonString(Response->GetContentAsString(), UserInfoResponse);
-					UE_LOG(HTTPGameApiLog, Log, TEXT("User Info Response Nickname: %s "), *UserInfoResponse.Nickname);
+					UE_LOG(HTTPGameApiLog, Log, TEXT("User Info Response Nickname: %s, And Email: %s"), *UserInfoResponse.Nickname, *UserInfoResponse.Email);
 					CallBack(true, UserInfoResponse, FUserInfoErrorResponse());
 				}
 				break;

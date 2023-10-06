@@ -17,7 +17,11 @@ UCLASS()
 class KAMPUS_API ULoginWidget : public UUserWidget, public IEntryFormExecute
 {
 	GENERATED_BODY()
-public:
+	
+protected:
+	virtual void NativeOnInitialized() override;
+
+private:
 
 	UPROPERTY(meta = (BindWidget))
 	UEditableTextBox* LoginText;
@@ -31,13 +35,9 @@ public:
 	UPROPERTY(meta =(BindWidget))
 	UButton* LoginButton;
 
-protected:
-	virtual void NativeOnInitialized() override;
+	FString GetStringValueFromEditableTextBox(UEditableTextBox* EditableTextBox) const;
 
-private:
 	UFUNCTION()
 	void OnLoginButtonClicked();
-
-	FString GetStringValueFromEditableTextBox(UEditableTextBox* EditableTextBox) const;
 	
 };

@@ -6,6 +6,7 @@
 #include "Button.h"
 #include "EditableTextBox.h"
 #include "FormFieldsValidatorLib.h"
+#include "TextBlock.h"
 #include "Requests/GameAPI/HTTPGameAPIRequestsLib.h"
 
 
@@ -17,6 +18,9 @@ void URegisterWidget::NativeOnInitialized()
 
 void URegisterWidget::OnRegisterButtonClicked()
 {
+	//Clear Error Text
+	ErrorText->SetText(FText());
+	
 	if (UFormFieldsValidatorLib::IsRegisterFieldsValid(LoginText->GetText(), NicknameText->GetText(),
 	                                                   EmailText->GetText(), PasswordText->GetText(),
 	                                                   ConfirmPasswordText->GetText()))
@@ -33,13 +37,18 @@ void URegisterWidget::OnRegisterButtonClicked()
 				UE_LOG(LogTemp, Warning, TEXT("Register success!"));
 				OnFormExecute.Broadcast(RegisterResponse.Token);
 			}
+			else
+			{
+				ErrorText->SetText(FText::FromString(RegisterErrorResponse.Error));
+			}
 			
 		},RegisterRequest);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Invalid register fields"))
+		ErrorText->SetText(FText::FromString("Invalid register fields!"));
 	}
+	
 }
 
 FString URegisterWidget::GetStringValueFromEditableTextBox(UEditableTextBox* EditableTextBox) const 

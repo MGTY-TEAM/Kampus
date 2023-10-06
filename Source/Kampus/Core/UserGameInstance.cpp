@@ -23,15 +23,24 @@ const FString& UUserGameInstance::GetUserToken() const
 	return M_UserToken;
 }
 
-void UUserGameInstance::TryToGetUserInfo()
+bool UUserGameInstance::TryToGetAndFillUserInfo()
 {
 	FUserInfoRequest UserInfoRequest;
-	UserInfoRequest.Token = M_UserToken;
+	UserInfoRequest.Token = GetUserToken();
+
 	UHTTPGameAPIRequestsLib::GameAPIUserInfoRequest(
-		[](const bool& success, const FUserInfoResponse& UserInfoResponse, const FUserInfoErrorResponse& UserInfoErrorResponse)
+		[this](const bool& bSuccess, const FUserInfoResponse& UserInfoResponse, const FUserInfoErrorResponse& UserInfoErrorResponse)
 		{
-			fjfjkj;
+			if (bSuccess)
+			{
+				M_UserInfo.Email = UserInfoResponse.Email;
+				M_UserInfo.Nickname = UserInfoResponse.Nickname;
+				return true;
+			}
+			return false;
 		}, UserInfoRequest);
+	
+	return false;
 }
 
 void UUserGameInstance::InitializeUserInfo()

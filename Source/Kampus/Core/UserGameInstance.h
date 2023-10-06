@@ -34,7 +34,12 @@ public:
 	void SetUserToken(const FString& Token);
 	const FString& GetUserToken() const;
 
-	void TryToGetUserInfo();
+	/**
+	 * @brief Try to get user info from api request.
+	 * @return true if user info filled up UserInfo, otherwise false;
+	 */
+	bool TryToGetAndFillUserInfo();
+	
 	void InitializeUserInfo();
 
 private:

@@ -53,7 +53,6 @@ void UEntryWidget::OnSwitchEntryTypeButtonClicked()
 void UEntryWidget::OnLoginExecute(const FString& Token)
 {
 	OnEntryExecute.Broadcast(Token);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Success Entry Brodcast")));
 }
 
 void UEntryWidget::OnRegisterExecute(const FString& Token)

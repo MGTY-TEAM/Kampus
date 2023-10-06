@@ -40,7 +40,7 @@ public:
 
 	static void GameAPIUserInfoRequest(
 		TFunction<void(const bool&, const FUserInfoResponse&, const FUserInfoErrorResponse&)> CallBack,
-		const FUserInfoResponse& UserInfoRequest);
+		const FUserInfoRequest& UserInfoRequest);
 
 private:
 	/**

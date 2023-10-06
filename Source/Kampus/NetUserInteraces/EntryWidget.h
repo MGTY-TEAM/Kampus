@@ -22,8 +22,14 @@ class KAMPUS_API UEntryWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-
+	
 	FOnEntryExecuted OnEntryExecute;
+
+protected:
+	
+	virtual void NativeOnInitialized() override;
+	
+private:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Entry classes")
 	TSubclassOf<ULoginWidget> LoginWidgetClass;
@@ -39,10 +45,7 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* SwitchEntryTypeButtonText;
-protected:
-
-	virtual void NativeOnInitialized() override;
-private:
+	
 	UPROPERTY()
 	ULoginWidget* M_LoginWidget;
 	

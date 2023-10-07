@@ -19,6 +19,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void Interact() override;
+	virtual void EndInteract() override;
 
 public:
 	virtual void Tick(float DeltaTime) override;

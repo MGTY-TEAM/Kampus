@@ -8,9 +8,20 @@ public class Kampus : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "Slate", "SlateCore", "UMG"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "HTTP", "Json", "JsonUtilities" });
+		PrivateDependencyModuleNames.AddRange(new string[]
+		{ 
+			"HeadMountedDisplay",
+			"AIModule",
+			"GameplayTasks",
+			"NavigationSystem",
+			"HTTP",
+			"Json",
+			"JsonUtilities",
+			"Slate",
+			"SlateCore"
+		});
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

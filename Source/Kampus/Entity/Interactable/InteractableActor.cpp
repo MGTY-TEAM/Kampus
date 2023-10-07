@@ -27,6 +27,11 @@ void AInteractableActor::Interact()
 	}
 }
 
+void AInteractableActor::EndInteract()
+{
+	UE_LOG(LogInteraction, Error, TEXT("Interaction End"));
+}
+
 void AInteractableActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

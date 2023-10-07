@@ -14,9 +14,14 @@ class KAMPUS_API AMainMenuGameMode : public AGameMode
 public:
 	
 	AMainMenuGameMode();
-
+	
 protected:
 	
 	virtual void BeginPlay() override;
-	
+
+private:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> MainMenuWidgetClass;
+
+	UUserWidget* MainMenuWidget;
 };

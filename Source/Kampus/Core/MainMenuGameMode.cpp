@@ -3,6 +3,7 @@
 
 #include "MainMenuGameMode.h"
 
+#include "UserWidget.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -10,8 +11,6 @@
 AMainMenuGameMode::AMainMenuGameMode()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
-	
 }
 
 void AMainMenuGameMode::BeginPlay()
@@ -23,8 +22,13 @@ void AMainMenuGameMode::BeginPlay()
 	World->GetFirstPlayerController()->SetInputMode(FInputModeUIOnly());
 
 	UGameplayStatics::GetGameInstance(World);
-	
-	
+
+	MainMenuWidget = CreateWidget<UUserWidget>(World, MainMenuWidgetClass);
+
+	if (MainMenuWidget)
+	{
+		MainMenuWidget->AddToViewport();
+	}
 }
 
 

@@ -3,13 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Drone/TeleportationPlane.h"
 #include "CoreDrone/DefaultAnimDrone.h"
-#include "UserInterface/ChatBox.h"
+#include "UserInterface/DarkeningScreen.h"
 #include "DroneGuide.generated.h"
 
 /**
  * 
  */
+
+class UChatBox;
 
 UENUM(BlueprintType)
 enum class EDroneGuide : uint8
@@ -30,6 +33,31 @@ public:
 	UPROPERTY(EditDefaultsOnly,Category="Widget")
 	UChatBox* ChatWidget;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
+	TSubclassOf<UUserWidget> BlueprintDarkeningClass;
+	UPROPERTY(EditDefaultsOnly,Category="Widget")
+	UDarkeningScreen* DarkWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KeyWords")
+	TArray<FString> KeyWordsForTeleportation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KeyWords")
+	TArray<FString> KeyWordsPlaces;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KeyWords")
+	FString BotURL;
+	UPROPERTY(EditAnywhere, Category="KeyWords")
+	TArray<AActor*> TeleportationPlaces;
+	UPROPERTY(EditDefaultsOnly, Category="KeyWords")
+	ATeleportationPlane* TeleportationPlace;
+
+	FTimerHandle EndDarkeningTimer;
+
+	UFUNCTION()
+	void TeleportToLocation(int index);
+	UFUNCTION()
+	void DarkeningScreen();
+	void EndDarkeningScreen();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -45,4 +73,6 @@ protected:
 
 	void OpenChat();
 	void CloseChat();
+
+	
 };

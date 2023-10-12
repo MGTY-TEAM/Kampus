@@ -3,14 +3,48 @@
 
 #include "DroneGuide.h"
 
+#include "TimerManager.h"
 #include "UserWidget.h"
+#include "Components/StaticMeshComponent.h"
+#include "UserInterface/ChatBox.h"
 
+
+void ADroneGuide::TeleportToLocation(int index)
+{
+	TeleportationPlace = Cast<ATeleportationPlane>(TeleportationPlaces[index]);
+	UE_LOG(LogTemp, Warning, TEXT("DroneTeleport"));
+	if (TeleportationPlace)
+	{
+		SetActorLocation(TeleportationPlace->RobotPlane->GetComponentLocation());
+	}
+}
+
+void ADroneGuide::DarkeningScreen()
+{
+	DarkWidget = CreateWidget<UDarkeningScreen>(GetWorld()->GetFirstPlayerController(), BlueprintDarkeningClass);
+	DarkWidget->AddToPlayerScreen();
+	GetWorld()->GetTimerManager().SetTimer(EndDarkeningTimer, this, &ADroneGuide::EndDarkeningScreen, 1.5f, false);
+	UE_LOG(LogTemp, Warning, TEXT("Daaark"));
+}
+
+void ADroneGuide::EndDarkeningScreen()
+{
+	DarkWidget->RemoveFromParent();
+}
 
 void ADroneGuide::BeginPlay()
 {
 	Super::BeginPlay();
 	ChangeState(EDroneGuide::Drone_Idle);
+	
 	ChatWidget = CreateWidget<UChatBox>(GetWorld()->GetFirstPlayerController(), BlueprintChatClass);
+	
+	if (ChatWidget)
+	{
+		ChatWidget->TeleportationEvent.AddDynamic(this, &ADroneGuide::TeleportToLocation);
+		ChatWidget->DarkeningEvent.AddDynamic(this, &ADroneGuide::DarkeningScreen);
+	}
+	
 }
 
 void ADroneGuide::Interact()
@@ -76,4 +110,5 @@ void ADroneGuide::CloseChat()
 {
 	ChatWidget->SetVisibility(ESlateVisibility::Hidden);
 }
+
 

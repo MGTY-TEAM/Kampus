@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TimerManager.h"
+#include "AI/AIDrone/DroneGuide.h"
+
 
 #include "Blueprint/UserWidget.h"
-#include "Drone/Drone.h"
 #include "Kismet/GameplayStatics.h"
 #include "ChatBox.generated.h"
 
@@ -14,6 +16,7 @@
  */
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTeleportationDelegate, int, index);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDarkeningDelegate);
 
 UCLASS()
 class KAMPUS_API UChatBox : public UUserWidget
@@ -25,7 +28,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widget")
 	TSubclassOf<UUserWidget> BlueprintWidgetClass;
 
-	ADrone* Drone;
+	ADroneGuide* Drone;
 
 	bool bCanRobotMoveToLocation = false;
 	
@@ -53,7 +56,14 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Dispatcher")
 	FTeleportationDelegate TeleportationEvent;
 
+	UPROPERTY(BlueprintAssignable, Category="Dispatcher")
+	FDarkeningDelegate DarkeningEvent;
 
+	FTimerHandle TeleportTimer;
+	FTimerDelegate TimerDel;
+
+	void StartTeleport(int index);
+	
 protected:
 	UFUNCTION()
 	virtual bool Initialize();
@@ -73,3 +83,4 @@ protected:
 
 	
 };
+

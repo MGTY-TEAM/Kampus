@@ -8,15 +8,21 @@
 #include "EditableTextBox.h"
 #include "ScrollBox.h"
 #include "TextBlock.h"
+#include "TimerManager.h"
 
 #include "Requests/HTTPRequestsLib.h"
 
+
+void UChatBox::StartTeleport(int index)
+{
+	TeleportationEvent.Broadcast(index);
+}
 
 bool UChatBox::Initialize()
 {
 	Super::Initialize();
 
-	Drone = Cast<ADrone>(UGameplayStatics::GetActorOfClass(GetWorld(), ADrone::StaticClass()));
+	Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
 	
 		UHTTPRequestsLib::AIMyLogicGetRequest([=](const FString& Response)
 		{
@@ -83,8 +89,11 @@ void UChatBox::BotResponse(const FString& Result)
 		{
 			if (Result.Find(Drone->KeyWordsPlaces[i],ESearchCase::CaseSensitive) != INDEX_NONE)
 			{
-				UE_LOG(LogRequests, Error, TEXT("GET Request Result: %s"), *Drone->KeyWordsPlaces[i])
-				TeleportationEvent.Broadcast(i);
+				UE_LOG(LogRequests, Error, TEXT("GET Request Result: %s"), *Drone->KeyWordsPlaces[i]);
+				TimerDel.BindUObject(this, &UChatBox::StartTeleport, i);
+				GetWorld()->GetTimerManager().SetTimer(TeleportTimer, TimerDel, 1.f, false);
+				//TeleportationEvent.Broadcast(i);
+				DarkeningEvent.Broadcast();
 				bCanRobotMoveToLocation = false;
 			}
 		}

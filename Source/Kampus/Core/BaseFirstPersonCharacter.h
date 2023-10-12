@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AI/AIDrone/DroneGuide.h"
 #include "Camera/CameraComponent.h"
-#include "Drone/Drone.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "BaseFirstPersonCharacter.generated.h"
@@ -41,9 +41,10 @@ public:
 	UCameraComponent* CameraComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category="Drone")
-	ADrone* Drone;
+	ADroneGuide* Drone;
 	UPROPERTY(EditDefaultsOnly, Category="Drone")
 	ATeleportationPlane* PlayerTeleportationPlace;
+
 	
 	void AILogicCallBack(const FString& Answer);
 
@@ -61,6 +62,7 @@ protected:
 	void InteractOnWithRobot();
 	void InteractOffWithRobot();
 	void FocusOnInteractableActor();
+
 
 public:
 	virtual void Tick(float DeltaTime) override;

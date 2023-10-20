@@ -23,9 +23,7 @@ void UEntryWidget::NativeOnInitialized()
 		{
 			WidgetSwitcher->AddChild(M_LoginWidget);
 			WidgetSwitcher->AddChild(M_RegisterWidget);
-
 			WidgetSwitcher->SetActiveWidget(M_LoginWidget);
-			
 			SwitchEntryTypeButtonText->SetText(FText::FromString("Register"));
 			
 			SwitchEntryTypeButton->OnClicked.AddDynamic(this, &UEntryWidget::OnSwitchEntryTypeButtonClicked);
@@ -33,7 +31,6 @@ void UEntryWidget::NativeOnInitialized()
 			M_RegisterWidget->OnFormExecute.AddDynamic(this, &UEntryWidget::OnRegisterExecute);
 		}
 	}
-	
 }
 
 void UEntryWidget::OnSwitchEntryTypeButtonClicked()
@@ -49,7 +46,7 @@ void UEntryWidget::OnSwitchEntryTypeButtonClicked()
 		SwitchEntryTypeButtonText->SetText(FText::FromString("Register"));
 	}
 }
-
+//TO DO:
 void UEntryWidget::OnLoginExecute(const FString& Token)
 {
 	OnEntryExecute.Broadcast(Token);

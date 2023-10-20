@@ -5,9 +5,9 @@
 
 #include "Button.h"
 #include "EditableTextBox.h"
-#include "FormFieldsValidatorLib.h"
+#include "Libraries/Validation/FormFieldsValidatorLib.h"
 #include "TextBlock.h"
-#include "Requests/GameAPI/HTTPGameAPIRequestsLib.h"
+#include "Libraries/Requests/GameAPI/HTTPGameAPIRequestsLib.h"
 
 
 void URegisterWidget::NativeOnInitialized()
@@ -30,7 +30,7 @@ void URegisterWidget::OnRegisterButtonClicked()
 		RegisterRequest.Nickname = GetStringValueFromEditableTextBox(NicknameText);
 		RegisterRequest.Email = GetStringValueFromEditableTextBox(EmailText);
 		RegisterRequest.Password = GetStringValueFromEditableTextBox(PasswordText);
-		UHTTPGameAPIRequestsLib::GameAPIRegisterRequest([=](const bool bSuccess, const FRegisterResponse& RegisterResponse, const FRegisterErrorResponse& RegisterErrorResponse)
+		UHTTPGameAPIRequestsLib::GameAPIRegisterRequest([=](const bool bSuccess, const FRegisterResponse& RegisterResponse, const FErrorResponse& RegisterErrorResponse)
 		{
 			if (bSuccess)
 			{

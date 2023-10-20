@@ -6,7 +6,7 @@
 #include "HTTPGameAPIStructures.generated.h"
 
 
-
+//////////LOGIN_STRUCTURES 
 USTRUCT(BlueprintType)
 struct FLoginRequest
 {
@@ -27,17 +27,7 @@ struct FLoginResponse
 	UPROPERTY()
 	FString Token;
 };
-
-USTRUCT(BlueprintType)
-struct FLoginErrorResponse
-{
-	GENERATED_BODY()
-	
-	UPROPERTY()
-	FString Error;
-};
-
-
+//////////REGISTER_STRUCTURES
 USTRUCT(BlueprintType)
 struct FRegisterRequest
 {
@@ -64,18 +54,7 @@ struct FRegisterResponse
 	UPROPERTY()
 	FString Token;
 };
-
-USTRUCT(BlueprintType)
-struct FRegisterErrorResponse
-{
-	GENERATED_BODY()
-	
-	UPROPERTY()
-	FString Error;
-};
-
-
-
+//////////USER_INFO_STRUCTURES
 USTRUCT(BlueprintType)
 struct FUserInfoRequest
 {
@@ -84,10 +63,14 @@ struct FUserInfoRequest
 	UPROPERTY()
 	FString Token;
 };
+
 USTRUCT(BlueprintType)
 struct FUserInfoResponse
 {
 	GENERATED_BODY()
+
+	UPROPERTY()
+	FString ID;
 	
 	UPROPERTY()
 	FString Nickname;
@@ -95,10 +78,27 @@ struct FUserInfoResponse
 	UPROPERTY()
 	FString Email;
 };
-USTRUCT(BlueprintType)
-struct FUserInfoErrorResponse
+
+///SERVERS_INFO_STRUCTURES
+
+USTRUCT(BlueprintTYpe)
+struct FServerInfo
 {
 	GENERATED_BODY()
 	UPROPERTY()
+	FString Port;
+	UPROPERTY()
+	int32 ConnectedClients;
+};
+
+
+/////////////ERROR_STRUCT 
+USTRUCT(BlueprintType)
+struct FErrorResponse
+{
+	GENERATED_BODY()
+	
+	UPROPERTY()
 	FString Error;
 };
+

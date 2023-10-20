@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Interface.h"
-#include "EntryFormExecute.generated.h"
+#include "FormExecutable.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFormExecute, const FString&, Token);
 // This class does not need to be modified.
 UINTERFACE()
-class UEntryFormExecute : public UInterface
+class UFormExecutable : public UInterface
 {
 	GENERATED_BODY()
 };
 
-class KAMPUS_API IEntryFormExecute
+class KAMPUS_API IFormExecutable
 {
 	GENERATED_BODY()
 

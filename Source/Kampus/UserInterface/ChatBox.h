@@ -72,6 +72,8 @@ protected:
 	virtual void NativeConstruct() override;
 
 	UFUNCTION()
+
+	
 	void SendMessageButtonClicked();
 
 	//UFUNCTION()

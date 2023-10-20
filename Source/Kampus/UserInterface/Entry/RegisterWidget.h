@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EntryFormExecute.h"
+#include "..\..\Interfaces\Form\FormExecutable.h"
 #include "UserWidget.h"
 #include "RegisterWidget.generated.h"
 
@@ -14,7 +14,7 @@ class UButton;
  * 
  */
 UCLASS()
-class KAMPUS_API URegisterWidget : public UUserWidget, public IEntryFormExecute
+class KAMPUS_API URegisterWidget : public UUserWidget, public IFormExecutable
 {
 	GENERATED_BODY()
 protected:

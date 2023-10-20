@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Object.h"
-#include "HTTPRequestsLib.generated.h"
+#include "HTTPAiMyLogicRequestsLib.generated.h"
 DECLARE_LOG_CATEGORY_EXTERN(LogRequests, Log, All);
  
 /**
  * 
  */
 UCLASS()
-class KAMPUS_API UHTTPRequestsLib : public UObject
+class KAMPUS_API UHTTPAiMyLogicRequestsLib : public UObject
 {
 	GENERATED_BODY()
 

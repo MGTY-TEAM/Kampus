@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EntryFormExecute.h"
+#include "..\..\Interfaces\Form\FormExecutable.h"
 #include "UserWidget.h"
 #include "LoginWidget.generated.h"
 
@@ -14,7 +14,7 @@ class UButton;
  * 
  */
 UCLASS()
-class KAMPUS_API ULoginWidget : public UUserWidget, public IEntryFormExecute
+class KAMPUS_API ULoginWidget : public UUserWidget, public IFormExecutable
 {
 	GENERATED_BODY()
 	
@@ -23,6 +23,7 @@ protected:
 
 private:
 
+	
 	UPROPERTY(meta = (BindWidget))
 	UEditableTextBox* LoginText;
 	

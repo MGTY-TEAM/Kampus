@@ -5,10 +5,12 @@
 
 #include "Button.h"
 #include "EditableTextBox.h"
-#include "FormFieldsValidatorLib.h"
+
 #include "TextBlock.h"
 #include "Engine/Engine.h"
-#include "Requests/GameAPI/HTTPGameAPIRequestsLib.h"
+#include "Libraries/Requests/GameAPI/HTTPGameAPIRequestsLib.h"
+#include "Libraries/Requests/GameAPI/HTTPGameAPIStructures.h"
+#include "Libraries/Validation/FormFieldsValidatorLib.h"
 
 void ULoginWidget::NativeOnInitialized()
 {
@@ -24,7 +26,7 @@ void ULoginWidget::OnLoginButtonClicked()
 		FLoginRequest LoginRequest;
 		LoginRequest.Login =  GetStringValueFromEditableTextBox(LoginText);
 		LoginRequest.Password = GetStringValueFromEditableTextBox(PasswordText);
-		UHTTPGameAPIRequestsLib::GameAPILoginRequest([=](const bool& bSuccess, const FLoginResponse& LoginResponse, const FLoginErrorResponse& LoginErrorResponse)
+		UHTTPGameAPIRequestsLib::GameAPILoginRequest([=](const bool& bSuccess, const FLoginResponse& LoginResponse, const FErrorResponse& LoginErrorResponse)
 		{
 			if (bSuccess)
 			{

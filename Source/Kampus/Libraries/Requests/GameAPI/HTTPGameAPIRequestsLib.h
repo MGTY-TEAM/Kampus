@@ -26,7 +26,7 @@ public:
 	* @param LoginRequest Structure containing the login request.
 	*/
 	static void GameAPILoginRequest(
-		TFunction<void(const bool&, const FLoginResponse&, const FLoginErrorResponse&)> CallBack,
+		TFunction<void(const bool&, const FLoginResponse&, const FErrorResponse&)> CallBack,
 		const FLoginRequest& LoginRequest);
 
 	/**
@@ -35,13 +35,15 @@ public:
 	* @param RegisterRequest Structure containing the register request.
 	*/
 	static void GameAPIRegisterRequest(
-	TFunction<void(const bool&, const FRegisterResponse& , const  FRegisterErrorResponse&)> CallBack,
+	TFunction<void(const bool&, const FRegisterResponse& , const  FErrorResponse&)> CallBack,
 								   const FRegisterRequest& RegisterRequest);
 
 	static void GameAPIUserInfoRequest(
-		TFunction<void(const bool&, const FUserInfoResponse&, const FUserInfoErrorResponse&)> CallBack,
+		TFunction<void(const bool&, const FUserInfoResponse&, const FErrorResponse&)> CallBack,
 		const FUserInfoRequest& UserInfoRequest);
 
+	static void GameApiServerInfoRequest(TFunction<void(const bool&, const TArray<FServerInfo>&, const FErrorResponse&)> CallBack);
+	
 private:
 	/**
 	 * @brief Get a JSON-formatted FString from a Struct.

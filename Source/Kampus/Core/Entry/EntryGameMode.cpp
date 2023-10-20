@@ -1,6 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
+
 #include "EntryGameMode.h"
 
 #include "UserWidget.h"
@@ -8,12 +9,13 @@
 #include "Core/UserGameInstance.h"
 #include "Engine/Engine.h"
 #include "Kismet/GameplayStatics.h"
-#include "NetUserInteraces/EntryWidget.h"
+#include "UserInterface/Entry/EntryWidget.h"
+
+
 
 AEntryGameMode::AEntryGameMode()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	
 }
 
 void AEntryGameMode::BeginPlay()

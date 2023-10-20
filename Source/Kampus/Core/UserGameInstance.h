@@ -16,6 +16,8 @@ struct FUserInfo
 	GENERATED_BODY()
 	UPROPERTY(BlueprintReadOnly, Category = "User") FString Nickname;
 	UPROPERTY(BlueprintReadOnly, Category = "User") FString Email;
+	UPROPERTY(BlueprintReadOnly, Category = "User") FString ID;
+	
 };
 
 UCLASS()
@@ -40,9 +42,13 @@ public:
 	 */
 	bool TryToGetAndFillUserInfo();
 	
-	void InitializeUserInfo();
+	void TryConnectToGameServer(const FString& Port);
 
+protected:
+	virtual void Init() override;
 private:
 	FUserInfo M_UserInfo;
 	FString M_UserToken;
+
+	FString GameServerPort;
 };

@@ -11,7 +11,6 @@
 #include "AI/AIDrone/DroneGuide.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/Engine.h"
-#include "Entity/Interactable/InteractableActor.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -38,10 +37,12 @@ void ABaseFirstPersonCharacter::BeginPlay()
 	GetWorldTimerManager().SetTimer(OnFocusTimer, this, &ABaseFirstPersonCharacter::FocusOnInteractableActor, 0.01f, true, 0.0f);
 	Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
 
+	/*
 	if (Drone->ChatWidget)
 	{
 		Drone->ChatWidget->TeleportationEvent.AddDynamic(this, &ABaseFirstPersonCharacter::TeleportToLocation);
 	}
+*/
 }
 
 // Function for interaction

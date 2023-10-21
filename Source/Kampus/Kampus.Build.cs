@@ -8,7 +8,7 @@ public class Kampus : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "WebSockets" });
 
 		PrivateDependencyModuleNames.AddRange(new string[]
 		{ 
@@ -20,7 +20,7 @@ public class Kampus : ModuleRules
 			"Json",
 			"JsonUtilities",
 			"Slate",
-			"SlateCore"
+			"SlateCore",
 		});
 
 		// Uncomment if you are using Slate UI

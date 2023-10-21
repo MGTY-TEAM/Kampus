@@ -8,17 +8,9 @@
 #include "Libraries/Requests/GameAPI/HTTPGameAPIStructures.h"
 
 
-const FUserInfo& UUserGameInstance::GetUserInfo() const
+const FString& UUserGameInstance::GetUserID() const
 {
-	return M_UserInfo;
-}
-
-void UUserGameInstance::SetUserToken(const FString& Token)
-{
-	if (M_UserToken.IsEmpty())
-	{
-		M_UserToken = Token;
-	}
+	return M_UserInfo.ID;
 }
 
 const FString& UUserGameInstance::GetUserToken() const
@@ -26,7 +18,30 @@ const FString& UUserGameInstance::GetUserToken() const
 	return M_UserToken;
 }
 
-bool UUserGameInstance::TryToGetAndFillUserInfo()
+const FString& UUserGameInstance::GetNickname() const
+{
+	return M_UserInfo.Nickname;
+}
+
+const FString& UUserGameInstance::GetEmail() const
+{
+	return M_UserInfo.Email;
+}
+
+const FString& UUserGameInstance::GetGameServerPort() const
+{
+	return M_GameServerPort;
+}
+
+void UUserGameInstance::SetUserToken(const FString& Token) 
+{
+	if (M_UserToken.IsEmpty())
+	{
+		M_UserToken = Token;
+	}
+}
+
+bool UUserGameInstance::TryToGetAndFillUserInfoAndOpenMainMenu()
 {
 	FUserInfoRequest UserInfoRequest;
 	UserInfoRequest.Token = GetUserToken();
@@ -38,9 +53,13 @@ bool UUserGameInstance::TryToGetAndFillUserInfo()
 			{
 				M_UserInfo.Email = UserInfoResponse.Email;
 				M_UserInfo.Nickname = UserInfoResponse.Nickname;
-				M_UserInfo.ID = UserInfoResponse.ID;
-				UE_LOG(LogTemp, Warning, TEXT("User info is filled. UserID: %s"), *UserInfoResponse.ID);			
+				M_UserInfo.ID = UserInfoResponse.UserID;
+				
+				UE_LOG(LogTemp, Warning, TEXT("User info is filled. UserID: %s"), *UserInfoResponse.UserID);
+				
+				UGameplayStatics::OpenLevel(this, "L_MainMenu");
 				return true;
+
 			}
 			return false;
 		}, UserInfoRequest);
@@ -48,18 +67,15 @@ bool UUserGameInstance::TryToGetAndFillUserInfo()
 	return false;
 }
 
-void UUserGameInstance::TryConnectToGameServer(const FString& Port)
+bool UUserGameInstance::TryConnectToGameServerAndOpenMultiplayerMap(const FString& Port)
 {
 	if (!Port.IsEmpty())
 	{
-		GameServerPort = Port;
-		UGameplayStatics::OpenLevel(this, "");	
+		M_GameServerPort = Port;
+		UGameplayStatics::OpenLevel(this, "L_MultiplayerSession");
+		return true;
 	}
+	return false;
 }
 
 
-
-void UUserGameInstance::Init()
-{
-	Super::Init();
-}

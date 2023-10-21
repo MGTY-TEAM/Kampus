@@ -27,6 +27,7 @@ void UEntryWidget::NativeOnInitialized()
 			SwitchEntryTypeButtonText->SetText(FText::FromString("Register"));
 			
 			SwitchEntryTypeButton->OnClicked.AddDynamic(this, &UEntryWidget::OnSwitchEntryTypeButtonClicked);
+			
 			M_LoginWidget->OnFormExecute.AddDynamic(this, &UEntryWidget::OnLoginExecute);
 			M_RegisterWidget->OnFormExecute.AddDynamic(this, &UEntryWidget::OnRegisterExecute);
 		}

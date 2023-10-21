@@ -41,7 +41,8 @@ void AEntryGameMode::OnEntryWidgetExecute(const FString& Token)
 		if (UserGameInstance)
 		{
 			UserGameInstance->SetUserToken(Token);
-			UserGameInstance->TryToGetAndFillUserInfo();
+			UserGameInstance->TryToGetAndFillUserInfoAndOpenMainMenu();
+			
 			UE_LOG(LogTemp, Warning, TEXT("Entry is finished!"));
 		}
 		M_EntryWidget->RemoveFromParent();

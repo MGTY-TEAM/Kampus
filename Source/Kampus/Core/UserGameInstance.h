@@ -27,28 +27,21 @@ class KAMPUS_API UUserGameInstance : public UGameInstance
 
 
 public:
-	/**
-	 * @brief Get user info.
-	 * @return FUserInfo struct which containing user info.
-	 */
-	const FUserInfo& GetUserInfo() const;
+	
+	const FString& GetUserID() const;
+	const FString& GetUserToken() const;
+	const FString& GetNickname() const;
+	const FString& GetEmail() const;
+	const FString& GetGameServerPort() const;
 
 	void SetUserToken(const FString& Token);
-	const FString& GetUserToken() const;
-
-	/**
-	 * @brief Try to get user info from api request.
-	 * @return true if user info filled up UserInfo, otherwise false;
-	 */
-	bool TryToGetAndFillUserInfo();
 	
-	void TryConnectToGameServer(const FString& Port);
+	bool TryToGetAndFillUserInfoAndOpenMainMenu();
+	bool TryConnectToGameServerAndOpenMultiplayerMap(const FString& Port);
 
-protected:
-	virtual void Init() override;
 private:
 	FUserInfo M_UserInfo;
+	
 	FString M_UserToken;
-
-	FString GameServerPort;
+	FString M_GameServerPort;
 };

@@ -57,6 +57,6 @@ void UServerList::OnConnectButtonClicked(const FString& Port)
 	UUserGameInstance* GameInstance  = Cast<UUserGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance)
 	{
-		GameInstance->TryConnectToGameServer(Port);
+		GameInstance->TryConnectToGameServerAndOpenMultiplayerMap(Port);
 	}
 }

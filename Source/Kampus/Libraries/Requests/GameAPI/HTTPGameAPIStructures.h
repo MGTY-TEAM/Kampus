@@ -70,7 +70,7 @@ struct FUserInfoResponse
 	GENERATED_BODY()
 
 	UPROPERTY()
-	FString ID;
+	FString UserID;
 	
 	UPROPERTY()
 	FString Nickname;

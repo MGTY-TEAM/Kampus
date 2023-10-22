@@ -52,7 +52,7 @@ void AMultiplayerGameMode::OnConnectToGameServer()
 
 void AMultiplayerGameMode::OnPlayerInfosMessage(TArray<FPlayerInfo> PlayerInfos)
 {
-	for ()
+	
 }
 
 void AMultiplayerGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)

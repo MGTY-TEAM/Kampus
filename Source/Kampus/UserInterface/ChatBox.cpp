@@ -10,7 +10,7 @@
 #include "TextBlock.h"
 #include "TimerManager.h"
 
-#include "Requests/HTTPRequestsLib.h"
+#include "Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
 
 
 void UChatBox::StartTeleport(int index)
@@ -24,7 +24,7 @@ bool UChatBox::Initialize()
 
 	Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
 	
-		UHTTPRequestsLib::AIMyLogicGetRequest([=](const FString& Message, const FString& ActionType, const int ActionID)
+		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest([=](const FString& Message, const FString& ActionType, const int ActionID)
 		{
 			SendMessage(FText::FromString(Message), FText::FromString("AI"));
 			UE_LOG(LogTemp, Warning, TEXT("SetRequest"));
@@ -52,7 +52,7 @@ void UChatBox::SendMessageButtonClicked()
 	}
 	else
 	{
-		UHTTPRequestsLib::AIMyLogicGetRequest([=](const FString& Message, const FString& ActionType, const int& ActionID)
+		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest([=](const FString& Message, const FString& ActionType, const int& ActionID)
 		{
 			BotResponse(Message, ActionType, ActionID);//кал!!!
 		}, StringRequest, Drone->BotURL);

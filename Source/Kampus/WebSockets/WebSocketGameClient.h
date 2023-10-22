@@ -4,10 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Object.h"
+#include "Libraries/Requests/GameServer/WSGameServerStructures.h"
 #include "WebSocketGameClient.generated.h"
 
-
-class FPlayerInfo;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnConnect);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerInfosMessage, TArray<FPlayerInfo>, PlayerInfos);

@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HTTPRequestsLib.h"
+#include "HTTPAiMyLogicRequestsLib.h"
 
 #include "GenericPlatformHttp.h"
 #include "HttpModule.h"
@@ -11,7 +11,7 @@
 #include "JsonSerializer.h"
 DEFINE_LOG_CATEGORY(LogRequests);
 
-void UHTTPRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString&, const FString&, const int&)> CallBack, const FString& StringRequest, const FString& URL)
+void UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString&, const FString&, const int&)> CallBack, const FString& StringRequest, const FString& URL)
 {
 	FHttpModule* Module = &FHttpModule::Get();
 	auto Request = Module->CreateRequest();

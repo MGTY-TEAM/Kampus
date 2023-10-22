@@ -2,7 +2,6 @@ Binaries
 DerivedDataCache
 Intermediate
 Saved
-Build
 .idea
 .vscode
 .vs
@@ -14,4 +13,3 @@ Build
 *.suo
 *.xcodeproj
 *.xcworkspace
-Kampus.sln.DotSettings.user

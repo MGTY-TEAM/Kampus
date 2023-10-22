@@ -18,6 +18,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTeleportationDelegate, int, index);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDarkeningDelegate);
 
+
 UCLASS()
 class KAMPUS_API UChatBox : public UUserWidget
 {
@@ -79,7 +80,7 @@ protected:
 
 	void SendMessage(FText Message, FText Sender);
 
-	void BotResponse(const FString& Result);
+	void BotResponse(const FString& Message, const FString& ActionType, const int& ActionID);
 
 	
 };

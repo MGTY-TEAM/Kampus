@@ -14,5 +14,11 @@
 				"UMG"
 			]
 		}
+	],
+	"Plugins": [
+		{
+			"Name": "html5networking",
+			"Enabled": true
+		}
 	]
 }

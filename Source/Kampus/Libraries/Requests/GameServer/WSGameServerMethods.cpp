@@ -51,8 +51,6 @@ TArray<FPlayerInfo> UWSGameServerMethods::ParsePlayersInfo(const FString& JsonSt
 				
 				PlayerInfo.Position = FVector(FCString::Atof(*X),FCString::Atof(*Y),FCString::Atof(*Z));
 				PlayerInfos.Add(PlayerInfo);
-				
-				UE_LOG(LogTemp, Warning, TEXT("UserID: %s, Position: (%s, %s, %s)\n"), *UserId, *X, *Y, *Z);
 			}
 			return PlayerInfos;
 		}

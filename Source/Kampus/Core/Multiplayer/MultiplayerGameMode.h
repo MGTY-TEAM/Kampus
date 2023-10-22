@@ -24,18 +24,30 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void Tick(float DeltaSeconds) override;	
+
+	
 private:
 	UFUNCTION()
 	void OnConnectToGameServer();
 	UFUNCTION()
 	void OnPlayerInfosMessage(TArray<FPlayerInfo> PlayerInfos);
+
+	UFUNCTION()
+	void ClientTick();
+	
 	UWebSocketGameClient* M_WebSocketGameClient;
 	UUserGameInstance* M_UserGameInstance;
-
+	
 	APawn* M_ControlledPawn;
 	
 	bool bUserRegistered;
+	
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AOtherPlayerActor> OtherPlayerActorClass;
+	
+	TArray<AOtherPlayerActor*> M_OtherPlayers;
 
-	TArray<AOtherPlayerActor*> OtherPlayers;
+	FTimerHandle ClientTickTimerHandle;
+	
 };

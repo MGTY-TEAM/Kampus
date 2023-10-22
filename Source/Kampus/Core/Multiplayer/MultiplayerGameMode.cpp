@@ -3,8 +3,12 @@
 
 #include "MultiplayerGameMode.h"
 
+#include "OtherPlayerActor.h"
+#include "TimerManager.h"
 #include "Core/UserGameInstance.h"
+#include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
+#include "Libraries/Requests/GameServer/WSGameServerStructures.h"
 #include "WebSockets/WebSocketGameClient.h"
 
 
@@ -38,6 +42,8 @@ void AMultiplayerGameMode::BeginPlay()
 	
 	PlayerController->bShowMouseCursor = false;
 	PlayerController->SetInputMode(FInputModeGameOnly());
+
+	GetWorldTimerManager().SetTimer(ClientTickTimerHandle, this, &AMultiplayerGameMode::ClientTick, 0.007, true);
 }
 
 void AMultiplayerGameMode::OnConnectToGameServer()
@@ -52,7 +58,43 @@ void AMultiplayerGameMode::OnConnectToGameServer()
 
 void AMultiplayerGameMode::OnPlayerInfosMessage(TArray<FPlayerInfo> PlayerInfos)
 {
-	for ()
+	for (FPlayerInfo PlayerInfo : PlayerInfos)
+	{
+		bool bContain = false;
+
+		for (AOtherPlayerActor* OtherPlayerActor : M_OtherPlayers)
+		{
+			if (OtherPlayerActor->GetPlayerInfo().PlayerID == PlayerInfo.PlayerID)
+			{
+				OtherPlayerActor->SetPlayerInfo(PlayerInfo);
+				bContain = true;
+				break;
+			}
+		}
+		if (!bContain)
+		{
+			AOtherPlayerActor* OtherPlayerActor = GetWorld()->SpawnActor<AOtherPlayerActor>(OtherPlayerActorClass);
+			if (OtherPlayerActor)
+			{
+				OtherPlayerActor->SetPlayerInfo(PlayerInfo);
+				M_OtherPlayers.Add(OtherPlayerActor);
+			}
+		}
+	}
+}
+
+void AMultiplayerGameMode::ClientTick()
+{
+	if (M_WebSocketGameClient && M_ControlledPawn)
+	{
+		if (bUserRegistered)
+		{
+			if (M_ControlledPawn->GetVelocity().Size() > 0)
+			{
+				M_WebSocketGameClient->ReplicatePlayer(M_ControlledPawn->GetActorLocation(), M_ControlledPawn->GetActorRotation());
+			}
+		} 
+	}
 }
 
 void AMultiplayerGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -68,12 +110,4 @@ void AMultiplayerGameMode::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AMultiplayerGameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	
-	if (M_WebSocketGameClient && M_ControlledPawn)
-	{
-		if (bUserRegistered)
-		{
-			M_WebSocketGameClient->ReplicatePlayer(M_ControlledPawn->GetActorLocation(), M_ControlledPawn->GetActorRotation());
-		} 
-	}
 }

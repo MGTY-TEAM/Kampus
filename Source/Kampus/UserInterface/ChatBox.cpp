@@ -10,7 +10,7 @@
 #include "TextBlock.h"
 #include "TimerManager.h"
 
-#include "Libraries/Requests/Services/HTTPAiMyLogicRequestsLib.h"
+#include "Requests/HTTPRequestsLib.h"
 
 
 void UChatBox::StartTeleport(int index)
@@ -24,9 +24,9 @@ bool UChatBox::Initialize()
 
 	Drone = Cast<ADroneGuide>(UGameplayStatics::GetActorOfClass(GetWorld(), ADroneGuide::StaticClass()));
 	
-		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest([=](const FString& Response)
+		UHTTPRequestsLib::AIMyLogicGetRequest([=](const FString& Message, const FString& ActionType, const int ActionID)
 		{
-			SendMessage(FText::FromString(Response), FText::FromString("AI"));
+			SendMessage(FText::FromString(Message), FText::FromString("AI"));
 			UE_LOG(LogTemp, Warning, TEXT("SetRequest"));
 		}, "/start", Drone->BotURL);
 	
@@ -46,13 +46,21 @@ void UChatBox::SendMessageButtonClicked()
 	UE_LOG(LogTemp, Warning, TEXT("Button pressed"));
 	
 	FString StringRequest = SendMessage_TextBox->GetText().ToString();
-	
-		UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest([=](const FString& Response)
+	if (StringRequest == "")
 	{
-			BotResponse(Response);//кал!!!
-	}, StringRequest, Drone->BotURL);
-	SendMessage(SendMessage_TextBox->GetText(), FText::FromString("User"));
-}
+		
+	}
+	else
+	{
+		UHTTPRequestsLib::AIMyLogicGetRequest([=](const FString& Message, const FString& ActionType, const int& ActionID)
+		{
+			BotResponse(Message, ActionType, ActionID);//кал!!!
+		}, StringRequest, Drone->BotURL);
+			SendMessage(SendMessage_TextBox->GetText(), FText::FromString("User"));
+			SendMessage_Button->SetIsEnabled(false);
+	}
+		
+;}
 
 /*void UChatBox::OnTextBoxTextCommitted(const FText& Text, ETextCommit::Type CommitMethod)
 {
@@ -77,17 +85,33 @@ void UChatBox::SendMessage(FText Message, FText Sender)
 	}
 }
 
-void UChatBox::BotResponse(const FString& Result)
+void UChatBox::BotResponse(const FString& Message, const FString& ActionType, const int& ActionID)
 {
-	UE_LOG(LogRequests, Log, TEXT("GET Request Result: %s"), *Result);
-	SendMessage(FText::FromString(Result), FText::FromString("AI"));
+	UE_LOG(LogRequests, Log, TEXT("GET Request Result: %s"), *Message);
+	
+	SendMessage(FText::FromString(Message), FText::FromString("AI"));
 	Chat_ScrollBox->ScrollToEnd();
-
-	if (bCanRobotMoveToLocation)
+	SendMessage_Button->SetIsEnabled(true);
+	if(ActionType == "Teleport")
+	{
+		TimerDel.BindUObject(this, &UChatBox::StartTeleport, ActionID);
+		GetWorld()->GetTimerManager().SetTimer(TeleportTimer, TimerDel, 1.f, false);
+		DarkeningEvent.Broadcast();
+	}
+	else if(ActionType == "Walk")
+	{
+		
+	}
+	else if(ActionType == "ViewInfo")
+	{
+		
+	}
+	
+	/*if (bCanRobotMoveToLocation)
 	{
 		for (int i = 0; i < Drone->KeyWordsPlaces.Num(); i++)
 		{
-			if (Result.Find(Drone->KeyWordsPlaces[i],ESearchCase::CaseSensitive) != INDEX_NONE)
+			if (Message.Find(Drone->KeyWordsPlaces[i],ESearchCase::CaseSensitive) != INDEX_NONE)
 			{
 				UE_LOG(LogRequests, Error, TEXT("GET Request Result: %s"), *Drone->KeyWordsPlaces[i]);
 				TimerDel.BindUObject(this, &UChatBox::StartTeleport, i);
@@ -101,11 +125,11 @@ void UChatBox::BotResponse(const FString& Result)
 	
 	for (int i = 0; i < Drone->KeyWordsForTeleportation.Num(); i++)
 	{
-		if (Result.Find(Drone->KeyWordsForTeleportation[i],ESearchCase::CaseSensitive) != INDEX_NONE)
+		if (Message.Find(Drone->KeyWordsForTeleportation[i],ESearchCase::CaseSensitive) != INDEX_NONE)
 		{
 			UE_LOG(LogRequests, Error, TEXT("GET Request Result: %s"), *Drone->KeyWordsForTeleportation[i]);
 			bCanRobotMoveToLocation = true;
 		}
-	}
+	}*/
 }
 

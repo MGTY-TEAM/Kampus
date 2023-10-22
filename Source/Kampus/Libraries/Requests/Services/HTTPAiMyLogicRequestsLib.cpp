@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HTTPAiMyLogicRequestsLib.h"
+#include "HTTPRequestsLib.h"
 
 #include "GenericPlatformHttp.h"
 #include "HttpModule.h"
@@ -11,7 +11,7 @@
 #include "JsonSerializer.h"
 DEFINE_LOG_CATEGORY(LogRequests);
 
-void UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString&)> CallBack, const FString& StringRequest, const FString& URL)
+void UHTTPRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString&, const FString&, const int&)> CallBack, const FString& StringRequest, const FString& URL)
 {
 	FHttpModule* Module = &FHttpModule::Get();
 	auto Request = Module->CreateRequest();
@@ -25,7 +25,21 @@ void UHTTPAiMyLogicRequestsLib::AIMyLogicGetRequest(TFunction<void(const FString
 			{
 				TSharedPtr<FJsonObject> DataObject = JsonObject->GetObjectField("data");
 				FString Answer = DataObject->GetStringField("answer");
-				CallBack(Answer);
+
+				TSharedPtr<FJsonObject> JsonObjectAnswer;
+				TSharedRef<TJsonReader<>> AnswerReader = TJsonReaderFactory<>::Create(Answer);
+				
+				if(FJsonSerializer::Deserialize(AnswerReader, JsonObjectAnswer))
+				{
+					FString Message = JsonObjectAnswer-> GetStringField("message");
+					FString ActionType = JsonObjectAnswer -> GetStringField("actionType");
+					int ActionID = JsonObjectAnswer -> GetIntegerField("actionID");
+					
+					//UE_LOG(LogRequests, Log, TEXT("GET Request Result: %d"), static_cast<int>(ActionID));
+					CallBack(Message, ActionType, ActionID);
+				}
+				
+				//CallBack(Answer, Answer);
 			}
 		});
 	FString EncodedStringRequest = FGenericPlatformHttp::UrlEncode(StringRequest);

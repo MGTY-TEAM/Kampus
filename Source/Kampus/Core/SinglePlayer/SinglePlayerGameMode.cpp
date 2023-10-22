@@ -3,3 +3,8 @@
 
 #include "SinglePlayerGameMode.h"
 
+
+void ASinglePlayerGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+}
